@@ -86,7 +86,7 @@ public class Feeder extends SubsystemBase {
     );
   }
 
-  public Command feedCommand(Speed speed) {
+  public Command feedCommand() {
     return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
   }
 

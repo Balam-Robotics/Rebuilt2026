@@ -11,10 +11,19 @@ import java.util.Optional;
 import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.commands.AutoRoutines;
 import frc.robot.commands.ManualDriveCommand;
+import frc.robot.commands.SubsystemCommands;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Floor;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.util.SwerveTelemetry;
 
@@ -22,6 +31,13 @@ import frc.robot.Constants.SwerveConstants;
 
 public class RobotContainer {
     private final Swerve swerve = new Swerve();
+
+    private final Intake intake = new Intake();
+    private final Floor floor = new Floor();
+    private final Feeder feeder = new Feeder();
+    private final Shooter shooter = new Shooter();
+    private final Hood hood = new Hood();
+
     private final Limelight limelight_front = new Limelight("limelight-front");
     private final Limelight limelight_back = new Limelight("limelight-back");
 
@@ -31,6 +47,17 @@ public class RobotContainer {
 
     private final AutoRoutines m_autoRoutines = new AutoRoutines(
         swerve
+    );
+
+    private final SubsystemCommands m_subsystemCommands = new SubsystemCommands(
+        swerve,
+        intake,
+        floor,
+        feeder,
+        shooter,
+        hood,
+        () -> -m_controller.getLeftY(),
+        () -> -m_controller.getLeftX()
     );
 
     public RobotContainer() {
@@ -43,6 +70,14 @@ public class RobotContainer {
         configureManualDriveBindings();
         limelight_front.setDefaultCommand(updateVisionCommand(limelight_front));
         limelight_back.setDefaultCommand(updateVisionCommand(limelight_back));
+    
+        RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
+            .onTrue(intake.homingCommand());
+
+        m_controller.rightTrigger().whileTrue(m_subsystemCommands.aimAndShoot());
+        m_controller.rightBumper().whileTrue(m_subsystemCommands.shootManually());
+        m_controller.leftTrigger().whileTrue(intake.intakeCommand());
+        m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
     }
 
     private void configureManualDriveBindings() {
@@ -54,7 +89,11 @@ public class RobotContainer {
         );
         swerve.setDefaultCommand(manualDriveCommand);
 
-        m_controller.a().onTrue(manualDriveCommand);
+        m_controller.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+        m_controller.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+        m_controller.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        m_controller.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
     }
 
     private Command updateVisionCommand(Limelight limelight) {

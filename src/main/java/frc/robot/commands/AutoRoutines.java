@@ -21,11 +21,12 @@ private final AutoChooser autoChooser;
     }
 
     public void configure() {
-        autoChooser.addRoutine("Demo Path", this::demoPathAuto);
+        //autoChooser.addRoutine("Demo Path", this::demoPathAuto);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
 
+    /*
     public AutoRoutine demoPathAuto() {
         AutoRoutine routine = autoFactory.newRoutine("DemoAuto");
         AutoTrajectory path = ChoreoTraj.NewPath.asAutoTraj(routine);
@@ -38,7 +39,7 @@ private final AutoChooser autoChooser;
         
         return routine;
     }
-
+    */
     public Command getSelectedCommand() {
         return autoChooser.selectedCommandScheduler();
     }
