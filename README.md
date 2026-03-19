@@ -18,3 +18,9 @@ ayuda
 ayuda
 ayda
 -ger
+
+## segun ya deberia estar el codiog
+en teoria ya esta todo, bueno me falto el subsistema del hanger pero eso es un probleam de al rato o mañana, voy a empezar aversionar pq si no pierdo todo xd
+
+# v1.0.1
+- 1.0.1 - codigo de hanger falta implementar
