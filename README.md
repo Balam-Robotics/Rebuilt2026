@@ -24,3 +24,4 @@ en teoria ya esta todo, bueno me falto el subsistema del hanger pero eso es un p
 
 # v1.0.1
 - 1.0.1 - codigo de hanger falta implementar
+- me da hueva poner numeros poer el punto es ya implmente el codigo de lhanger y voy a carar los uatonomos de fer y cami en la siguiente commit

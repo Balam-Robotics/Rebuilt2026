@@ -2,6 +2,9 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import com.ctre.phoenix6.CANBus;
 
 import frc.robot.generated.TunerConstants;
@@ -73,5 +76,24 @@ public final class Constants {
         // PWM 
         public static final int kHoodLeftServo = 3;
         public static final int kHoodRightServo = 4;
+    }
+
+    public static class CameraConstants { 
+        public static final String kFrontLimelightName = "limelight-front";
+        public static final String kBackLimelightName = "limelight-back";
+    }
+
+    public static final class ShuffleboardConstants {
+        public static final ShuffleboardTab kAutonomousTab = Shuffleboard.getTab("Autonomous");
+        public static final ShuffleboardTab kDriverTab = Shuffleboard.getTab("Driver");
+
+        // sub system tabs
+
+        public static final ShuffleboardTab kSwerveTab = Shuffleboard.getTab("Swerve");
+        public static final ShuffleboardTab kIntakeTab = Shuffleboard.getTab("Intake");
+        public static final ShuffleboardTab kFeederTab = Shuffleboard.getTab("Feeder");
+        public static final ShuffleboardTab kShooterTab = Shuffleboard.getTab("Shooter");
+        public static final ShuffleboardTab kHangerTab = Shuffleboard.getTab("Hanger"); 
+        public static final ShuffleboardTab kClimberTab = Shuffleboard.getTab("Climber");
     }
 }

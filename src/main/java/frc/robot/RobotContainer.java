@@ -11,6 +11,7 @@ import java.util.Optional;
 import choreo.auto.AutoRoutine;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Hanger;
 import frc.util.SwerveTelemetry;
 
 import frc.robot.Constants.SwerveConstants;
@@ -38,16 +40,26 @@ public class RobotContainer {
     private final Feeder feeder = new Feeder();
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
+    private final Hanger hanger = new Hanger();
 
     private final Limelight limelight_front = new Limelight("limelight-front");
     private final Limelight limelight_back = new Limelight("limelight-back");
+
+    private final Field2d field = new Field2d();
 
     private final SwerveTelemetry m_swerveTelemetry = new SwerveTelemetry(SwerveConstants.kMaxSpeed.in(MetersPerSecond));
 
     private final CommandXboxController m_controller = new CommandXboxController(0);
 
     private final AutoRoutines m_autoRoutines = new AutoRoutines(
-        swerve
+        swerve,
+        intake,
+        floor,
+        feeder,
+        shooter,
+        hood,
+        hanger,
+        limelight_front
     );
 
     private final SubsystemCommands m_subsystemCommands = new SubsystemCommands(
@@ -57,6 +69,7 @@ public class RobotContainer {
         feeder,
         shooter,
         hood,
+        hanger,
         () -> -m_controller.getLeftY(),
         () -> -m_controller.getLeftX()
     );
@@ -73,12 +86,16 @@ public class RobotContainer {
         limelight_back.setDefaultCommand(updateVisionCommand(limelight_back));
     
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-            .onTrue(intake.homingCommand());
+            .onTrue(intake.homingCommand())
+            .onTrue(hanger.homingCommand());
 
         m_controller.rightTrigger().whileTrue(m_subsystemCommands.aimAndShoot());
         m_controller.rightBumper().whileTrue(m_subsystemCommands.shootManually());
         m_controller.leftTrigger().whileTrue(intake.intakeCommand());
         m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+    
+        m_controller.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
+        m_controller.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
     }
 
     private void configureManualDriveBindings() {
