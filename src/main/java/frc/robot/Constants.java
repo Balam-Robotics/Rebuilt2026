@@ -67,15 +67,15 @@ public final class Constants {
         public static final int kFloor = 51;
         public static final int kFeeder = 52;
 
-        public static final int kShooterLeft = 61;
-        public static final int kShooterMiddle = 62;
-        public static final int kShooterRight = 63;
+        public static final int kShooterLeft = 60;
+        public static final int kShooterMiddle = 61;
+        public static final int kShooterRight = 62;
 
         public static final int kHanger = 18;
 
         // PWM 
-        public static final int kHoodLeftServo = 3;
-        public static final int kHoodRightServo = 4;
+        public static final int kHoodLeftServo = 8;
+        public static final int kHoodRightServo = 5;
     }
 
     public static class CameraConstants { 
@@ -93,7 +93,9 @@ public final class Constants {
         public static final ShuffleboardTab kIntakeTab = Shuffleboard.getTab("Intake");
         public static final ShuffleboardTab kFeederTab = Shuffleboard.getTab("Feeder");
         public static final ShuffleboardTab kShooterTab = Shuffleboard.getTab("Shooter");
-        public static final ShuffleboardTab kHangerTab = Shuffleboard.getTab("Hanger"); 
+        public static final ShuffleboardTab kHoodTab = Shuffleboard.getTab("Hood");
+        public static final ShuffleboardTab kHangerTab = Shuffleboard.getTab("Hanger");
         public static final ShuffleboardTab kClimberTab = Shuffleboard.getTab("Climber");
+        public static final ShuffleboardTab kFloorTab = Shuffleboard.getTab("Floor");
     }
 }

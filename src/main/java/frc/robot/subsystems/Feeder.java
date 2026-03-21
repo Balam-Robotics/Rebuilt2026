@@ -19,20 +19,23 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants.Ports;
+import frc.robot.Constants.ShuffleboardConstants;
 
 public class Feeder extends SubsystemBase {
   public enum Speed {
     FEED(5000);
 
     private final double rpm;
+
     private Speed(double rpm) {
       this.rpm = rpm;
     }
@@ -45,56 +48,72 @@ public class Feeder extends SubsystemBase {
   private final TalonFX m_motor;
   private final VelocityVoltage velocityRequest = new VelocityVoltage(0).withSlot(0);
   private final VoltageOut voltageRequest = new VoltageOut(0);
-  
+
   public Feeder() {
     m_motor = new TalonFX(Ports.kFeeder, Ports.kRoboRioCANBus);
 
     final TalonFXConfiguration config = new TalonFXConfiguration()
-      .withMotorOutput(
-        new MotorOutputConfigs()
-          .withInverted(InvertedValue.CounterClockwise_Positive)
-          .withNeutralMode(NeutralModeValue.Coast)
-      )
-      .withCurrentLimits(
-        new CurrentLimitsConfigs()
-          .withStatorCurrentLimit(Amps.of(120))
-          .withStatorCurrentLimitEnable(true)
-          .withStatorCurrentLimit(Amps.of(50))
-          .withSupplyCurrentLimitEnable(true)
-      )
-      .withSlot0(
-        new Slot0Configs()
-          .withKP(0.1)
-          .withKI(0)
-          .withKD(0)
-          .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond))
-      );
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.CounterClockwise_Positive)
+                .withNeutralMode(NeutralModeValue.Coast))
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(Amps.of(120))
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(Amps.of(50))
+                .withSupplyCurrentLimitEnable(true))
+        .withSlot0(
+            new Slot0Configs()
+                .withKP(0.1)
+                .withKI(0)
+                .withKD(0)
+                .withKV(12.0 / KrakenX60.kFreeSpeed.in(RotationsPerSecond)));
 
-      m_motor.getConfigurator().apply(config);
-      SmartDashboard.putData(this);
+    m_motor.getConfigurator().apply(config);
+    SmartDashboard.putData(this);
   }
 
   public void set(Speed speed) {
     m_motor.setControl(
-      velocityRequest.withVelocity(speed.angularVelocity())
-    );
+        velocityRequest.withVelocity(speed.angularVelocity()));
   }
 
   public void setPercentOutput(double percentOutput) {
     m_motor.setControl(
-      voltageRequest.withOutput(Volts.of(percentOutput * 12.0))
-    );
+        voltageRequest.withOutput(Volts.of(percentOutput * 12.0)));
   }
 
   public Command feedCommand() {
     return startEnd(() -> set(Speed.FEED), () -> setPercentOutput(0));
   }
 
+  private GenericEntry currentCommandEntry = ShuffleboardConstants.kFeederTab.add("Feeder/Current Command", "null")
+      .withWidget(BuiltInWidgets.kCommand)
+      .withSize(2, 1)
+      .withPosition(0, 0)
+      .getEntry();
+  private GenericEntry rpmEntry = ShuffleboardConstants.kFeederTab.add("Feeder/RPM", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(2, 0)
+      .getEntry();
+  private GenericEntry statorCurrentEntry = ShuffleboardConstants.kFeederTab.add("Feeder/Stator Current", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(3, 0)
+      .getEntry();
+  private GenericEntry supplyCurrentEntry = ShuffleboardConstants.kFeederTab.add("Feeder/Supply Current", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(4, 0)
+      .getEntry();
+
   @Override
-  public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("RPM", () -> m_motor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty("Stator Current", () -> m_motor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty("Supply Current", () -> m_motor.getSupplyCurrent().getValue().in(Amps), null);
+  public void periodic() {
+    currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
+    rpmEntry.setDouble(m_motor.getVelocity().getValue().in(RPM));
+    statorCurrentEntry.setDouble(m_motor.getStatorCurrent().getValue().in(Amps));
+    supplyCurrentEntry.setDouble(m_motor.getSupplyCurrent().getValue().in(Amps));
   }
 }

@@ -16,13 +16,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.Ports;
+import frc.robot.Constants.ShuffleboardConstants;
 
 public class Floor extends SubsystemBase {
   public enum Speed {
@@ -73,11 +75,32 @@ public class Floor extends SubsystemBase {
     return startEnd(() -> set(Speed.FEED), () -> set(Speed.STOP));
   }
 
+  private GenericEntry currentCommandEntry = ShuffleboardConstants.kFloorTab.add("Floor/Current Command", 0.0)
+      .withWidget(BuiltInWidgets.kCommand)
+      .withSize(2, 1)
+      .withPosition(0, 0)
+      .getEntry();
+  private GenericEntry rpmEntry = ShuffleboardConstants.kFloorTab.add("Floor/RPM", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(2, 0)
+      .getEntry();
+  private GenericEntry statorCurrentEntry = ShuffleboardConstants.kFloorTab.add("Floor/Stator Current", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(3, 0)
+      .getEntry();
+  private GenericEntry supplyCurrentEntry = ShuffleboardConstants.kFloorTab.add("Floor/Supply Current", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(4, 0)
+      .getEntry();
+
   @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("RPM", () -> m_motor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty("Stator Current", () -> m_motor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty("Supply Current", () -> m_motor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+  public void periodic() {
+    currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
+    rpmEntry.setDouble(m_motor.getVelocity().getValue().in(RPM));
+    statorCurrentEntry.setDouble(m_motor.getStatorCurrent().getValue().in(Amps));
+    supplyCurrentEntry.setDouble(m_motor.getSupplyCurrent().getValue().in(Amps));
+  }
 }

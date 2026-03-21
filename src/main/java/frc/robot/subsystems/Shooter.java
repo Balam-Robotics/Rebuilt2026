@@ -9,6 +9,9 @@ import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
+
 import java.util.List;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -22,8 +25,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -31,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants.Ports;
+import frc.robot.Constants.ShuffleboardConstants;
 
 public class Shooter extends SubsystemBase {
   private static final AngularVelocity kVelocityTolerance = RPM.of(100);
@@ -121,19 +126,92 @@ public class Shooter extends SubsystemBase {
       });
     }
 
-    private void initSendable(SendableBuilder builder, TalonFX motor, String name) {
-        builder.addDoubleProperty(name + " RPM", () -> motor.getVelocity().getValue().in(RPM), null);
-        builder.addDoubleProperty(name + " Stator Current", () -> motor.getStatorCurrent().getValue().in(Amps), null);
-        builder.addDoubleProperty(name + " Supply Current", () -> motor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+    private GenericEntry currentCommandEntry = ShuffleboardConstants.kShooterTab.add("Current Command", 0.0)
+    .withWidget(BuiltInWidgets.kCommand)
+    .withSize(2, 1)
+    .withPosition(0, 0)
+    .getEntry();
+    private GenericEntry dashboardTargetRPMEntry = ShuffleboardConstants.kShooterTab.add("Dashboard Target RPM", 0.0)
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(2, 1)
+    .withPosition(2, 0)
+    .getEntry();
+    private GenericEntry targetRPMEntry = ShuffleboardConstants.kShooterTab.add("Target RPM", 0.0)
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(2, 1)
+    .withPosition(4, 0)
+    .getEntry();
+  
+    // Left motor information
+
+    private GenericEntry leftMotorVoltageEntry = ShuffleboardConstants.kShooterTab.add("Left Motor Voltage", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(0, 2)
+    .getEntry();
+    private GenericEntry leftMotorCurrentEntry = ShuffleboardConstants.kShooterTab.add("Left Motor Current", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(2, 2)
+    .getEntry();
+    private GenericEntry leftMotorAccelerationEntry = ShuffleboardConstants.kShooterTab.add("Left Motor Acceleration", 0.0)
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(2, 1)
+    .withPosition(4, 2)
+    .getEntry();  
+
+    // Middle motor information
+
+    private GenericEntry middleMotorVoltageEntry = ShuffleboardConstants.kShooterTab.add("Middle Motor Voltage", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(0, 2)
+    .getEntry();
+    private GenericEntry middleMotorCurrentEntry = ShuffleboardConstants.kShooterTab.add("Middle Motor Current", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(2, 2)
+    .getEntry();
+    private GenericEntry middleMotorAccelerationEntry = ShuffleboardConstants.kShooterTab.add("Middle Motor Acceleration", 0.0)
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(2, 1)
+    .withPosition(4, 2)
+    .getEntry();  
+
+    // Right motor information
+
+    private GenericEntry rightMotorVoltageEntry = ShuffleboardConstants.kShooterTab.add("Right Motor Voltage", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(0, 3)
+    .getEntry();
+    private GenericEntry rightMotorCurrentEntry = ShuffleboardConstants.kShooterTab.add("Right Motor Current", 0.0)
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withSize(2, 1)
+    .withPosition(2, 3)
+    .getEntry();
+    private GenericEntry rightMotorAccelerationEntry = ShuffleboardConstants.kShooterTab.add("Right Motor Acceleration", 0.0)
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withSize(2, 1)
+    .withPosition(4, 3)
+    .getEntry();
 
     @Override
-    public void initSendable(SendableBuilder builder) {
-        initSendable(builder, m_leftMotor, "Left");
-        initSendable(builder, m_middleMotor, "Middle");
-        initSendable(builder, m_rightMotor, "Right");
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Dashboard RPM", () -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
-        builder.addDoubleProperty("Target RPM", () -> velocityRequest.getVelocityMeasure().in(RPM), null);
+    public void periodic() {
+        currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
+        dashboardTargetRPMEntry.setDouble(dashboardTargetRPM);
+        targetRPMEntry.setDouble(velocityRequest.getVelocityMeasure().in(RPM));
+
+        leftMotorVoltageEntry.setDouble(((Voltage) m_leftMotor.getMotorVoltage()).in(Volts));
+        leftMotorCurrentEntry.setDouble(((Current) m_leftMotor.getSupplyCurrent().getValue()).in(Amps));
+        leftMotorAccelerationEntry.setDouble(((AngularVelocity) m_leftMotor.getAcceleration()).in(RPM));
+
+        middleMotorVoltageEntry.setDouble(((Voltage) m_middleMotor.getMotorVoltage()).in(Volts));
+        middleMotorCurrentEntry.setDouble(((Current) m_middleMotor.getSupplyCurrent().getValue()).in(Amps));
+        middleMotorAccelerationEntry.setDouble(((AngularVelocity) m_middleMotor.getAcceleration()).in(RPM));
+
+        rightMotorVoltageEntry.setDouble(((Voltage) m_rightMotor.getMotorVoltage()).in(Volts));
+        rightMotorCurrentEntry.setDouble(((Current) m_rightMotor.getSupplyCurrent().getValue()).in(Amps));
+        rightMotorAccelerationEntry.setDouble(((AngularVelocity) m_rightMotor.getAcceleration()).in(RPM));
     }
 }

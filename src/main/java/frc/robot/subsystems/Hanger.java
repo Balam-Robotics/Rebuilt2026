@@ -19,16 +19,16 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Per;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants.Ports;
+import frc.robot.Constants.ShuffleboardConstants;
 
 
 public class Hanger extends SubsystemBase {
@@ -145,10 +146,26 @@ public class Hanger extends SubsystemBase {
     return Inches.of(extensionMeasure.in(Inches));
   }
 
+  private GenericEntry currentCommandEntry = ShuffleboardConstants.kHangerTab.add("Hanger/Current Command", 0.0)
+      .withWidget(BuiltInWidgets.kCommand)
+      .withSize(2, 1)
+      .withPosition(0, 0)
+      .getEntry();
+  private GenericEntry extensionEntry = ShuffleboardConstants.kHangerTab.add("Hanger/Extension (inches)", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(2, 0)
+      .getEntry();
+  private GenericEntry supplyCurrentEntry = ShuffleboardConstants.kHangerTab.add("Hanger/Supply Current", 0.0)
+      .withWidget(BuiltInWidgets.kTextView)
+      .withSize(2, 1)
+      .withPosition(4, 0)
+      .getEntry();
+
   @Override
-  public void initSendable(SendableBuilder builder) {
-        builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null", null);
-        builder.addDoubleProperty("Extension (inches)", () -> motorAngleToExtension(m_motor.getPosition().getValue()).in(Inches), null);
-        builder.addDoubleProperty("Supply Current", () -> m_motor.getSupplyCurrent().getValue().in(Amps), null);
-    }
+  public void periodic() {
+    currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
+    extensionEntry.setDouble(motorAngleToExtension(m_motor.getPosition().getValue()).in(Inches));
+    supplyCurrentEntry.setDouble(m_motor.getSupplyCurrent().getValue().in(Amps));
+  }
 }

@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
-import static frc.robot.generated.ChoreoTraj.Forward;
+import static frc.robot.generated.ChoreoTraj.LeftStartlineToBallzone;
+import static frc.robot.generated.ChoreoTraj.LeftBallzoneToRightBallzone;
+import static frc.robot.generated.ChoreoTraj.RightBallzoneToShooting;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -58,19 +60,83 @@ public class AutoRoutines {
     }
 
     public void configure() {
-        autoChooser.addRoutine("DemoPath", this::forwardAuto);
+        autoChooser.addRoutine("Left -> Ballpittt -> Right Shoot", this::L_Bi_Rs);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
     }
 
-    private AutoRoutine forwardAuto() {
+
+    /* Naming conventions
+
+    X-Y-Z
+
+    X = Starting position
+        L = Left
+        R = Right
+        C = Center
+
+    Y = Primary moving location
+        B = Ball Zone
+        S = Shooting Zone
+        O = Outpost
+
+    Z = Secondary moving location
+        R = Right
+        L = Left
+        S = Shooting Zone
+        O = Outpost
+
+    LOWER CASE LETTER INDICITAES SUBSYSTEM
+        i = intake
+        s = shooter
+        c = climber
+
+     */
+
+
+    // Full autonomous
+
+    private AutoRoutine L_Bi_Rs() {
+
+        boolean AUTO_VERIFIED = false;
+        if (!AUTO_VERIFIED) {
+            System.out.println("WARNING: Auto routine not verified!");
+        }
+
         final AutoRoutine routine = autoFactory.newRoutine("Forward Auto");
-        final AutoTrajectory forward = Forward.asAutoTraj(routine);
+        final AutoTrajectory startToBallzone = LeftStartlineToBallzone.asAutoTraj(routine);
+        final AutoTrajectory ballzoneToBallzone = LeftBallzoneToRightBallzone.asAutoTraj(routine);
+        final AutoTrajectory ballzoneToShooting = RightBallzoneToShooting.asAutoTraj(routine);
 
         routine.active().onTrue(
             Commands.sequence(
-                forward.resetOdometry(),
-                forward.cmd()
+                startToBallzone.resetOdometry(),
+                startToBallzone.cmd()
+            )
+        );
+
+        routine.observe(hanger::isHomed).onTrue(
+            Commands.sequence(
+                Commands.waitSeconds(0.5),
+                intake.runOnce(() -> intake.set(Intake.Position.INTAKE))
+            )
+        );
+
+        startToBallzone.doneDelayed(1).onTrue(ballzoneToBallzone.cmd());
+
+        ballzoneToBallzone.atTimeBeforeEnd(1).onTrue(intake.intakeCommand());
+        ballzoneToBallzone.doneDelayed(0.1).onTrue(ballzoneToShooting.cmd());
+
+        ballzoneToShooting.active().whileTrue(limelight.idle());
+        ballzoneToShooting.atTime(0.5).onTrue(
+            Commands.parallel(
+                shooter.spinUpCommand(2600),
+                hood.positionCommand(0.32)
+            )
+        );
+        ballzoneToShooting.done().onTrue(
+            Commands.sequence(
+                m_subsystemCommands.aimAndShoot().withTimeout(5)
             )
         );
 

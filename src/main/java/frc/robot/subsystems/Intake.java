@@ -24,10 +24,11 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -36,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.KrakenX60;
 import frc.robot.Constants.Ports;
+import frc.robot.Constants.ShuffleboardConstants;
 
 public class Intake extends SubsystemBase {
   public enum Speed {
@@ -194,13 +196,38 @@ public class Intake extends SubsystemBase {
         .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
   }
 
+  private GenericEntry currentCommandEntry = ShuffleboardConstants.kIntakeTab.add("Intake Current Command", 0.0)
+  .withWidget(BuiltInWidgets.kCommand)
+  .withSize(2, 1)
+  .withPosition(0, 0)
+  .getEntry();
+  private GenericEntry angleEntry = ShuffleboardConstants.kIntakeTab.add("Angle (degrees)", 0.0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  .withSize(2, 1)
+  .withPosition(2, 0)
+  .getEntry();
+  private GenericEntry rpmEntry = ShuffleboardConstants.kIntakeTab.add("Roller RPM", 0.0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  .withSize(2, 1)
+  .withPosition(4, 0)
+  .getEntry();
+  private GenericEntry pivotCurrentEntry = ShuffleboardConstants.kIntakeTab.add("Pivot Supply Current", 0.0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  .withSize(2, 1)
+  .withPosition(6, 0)
+  .getEntry();
+  private GenericEntry rollerCurrentEntry = ShuffleboardConstants.kIntakeTab.add("Roller Supply Current", 0.0)
+  .withWidget(BuiltInWidgets.kNumberBar)
+  .withSize(2, 1)
+  .withPosition(8, 0)
+  .getEntry();
+
   @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.addStringProperty("Command", () -> getCurrentCommand() != null ? getCurrentCommand().getName() : "null",
-        null);
-    builder.addDoubleProperty("Angle (degrees)", () -> m_pivotMotor.getPosition().getValue().in(Degrees), null);
-    builder.addDoubleProperty("RPM", () -> m_rollerMotor.getVelocity().getValue().in(RPM), null);
-    builder.addDoubleProperty("Pivot Supply Current", () -> m_pivotMotor.getSupplyCurrent().getValue().in(Amps), null);
-    builder.addDoubleProperty("Roller Supply Current", () -> m_rollerMotor.getSupplyCurrent().getValue().in(Amps), null);
+  public void periodic() {
+    currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
+    angleEntry.setDouble(m_pivotMotor.getPosition().getValue().in(Degrees));
+    rpmEntry.setDouble(m_rollerMotor.getVelocity().getValue().in(RPM));
+    pivotCurrentEntry.setDouble(m_pivotMotor.getSupplyCurrent().getValue().in(Amps));
+    rollerCurrentEntry.setDouble(m_rollerMotor.getSupplyCurrent().getValue().in(Amps));
   }
 }
