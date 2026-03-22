@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import com.ctre.phoenix6.CANBus;
 
-import frc.robot.generated.TunerConstants;
-
 public final class Constants {
 
     public static class KrakenX60 {
@@ -16,7 +14,7 @@ public final class Constants {
     }
 
     public static class SwerveConstants {
-        public static final LinearVelocity kMaxSpeed = TunerConstants.kSpeedAt12Volts;
+        public static final LinearVelocity kMaxSpeed = MetersPerSecond.of(5.42);
         public static final AngularVelocity kMaxRotationalRate = RotationsPerSecond.of(1);
         public static final AngularVelocity kPIDRotationDeadband = kMaxRotationalRate.times(0.005);
 

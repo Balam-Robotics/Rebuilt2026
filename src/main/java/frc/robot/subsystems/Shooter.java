@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
 import java.util.List;
 
@@ -53,9 +54,9 @@ public class Shooter extends SubsystemBase {
     m_rightMotor = new TalonFX(Ports.kShooterRight, Ports.kRoboRioCANBus);
     m_motors = List.of(m_leftMotor, m_middleMotor, m_rightMotor);
 
-    configureMotor(m_leftMotor, InvertedValue.CounterClockwise_Positive);
-    configureMotor(m_middleMotor, InvertedValue.Clockwise_Positive);
-    configureMotor(m_rightMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(m_leftMotor, InvertedValue.Clockwise_Positive);
+    configureMotor(m_middleMotor, InvertedValue.CounterClockwise_Positive);
+    configureMotor(m_rightMotor, InvertedValue.CounterClockwise_Positive);
 
     SmartDashboard.putData(this);
   }
@@ -201,7 +202,7 @@ public class Shooter extends SubsystemBase {
         currentCommandEntry.setString(getCurrentCommand() != null ? getCurrentCommand().getName() : "null");
         dashboardTargetRPMEntry.setDouble(dashboardTargetRPM);
         targetRPMEntry.setDouble(velocityRequest.getVelocityMeasure().in(RPM));
-
+/* 
         leftMotorVoltageEntry.setDouble(((Voltage) m_leftMotor.getMotorVoltage()).in(Volts));
         leftMotorCurrentEntry.setDouble(((Current) m_leftMotor.getSupplyCurrent().getValue()).in(Amps));
         leftMotorAccelerationEntry.setDouble(((AngularVelocity) m_leftMotor.getAcceleration()).in(RPM));
@@ -213,5 +214,11 @@ public class Shooter extends SubsystemBase {
         rightMotorVoltageEntry.setDouble(((Voltage) m_rightMotor.getMotorVoltage()).in(Volts));
         rightMotorCurrentEntry.setDouble(((Current) m_rightMotor.getSupplyCurrent().getValue()).in(Amps));
         rightMotorAccelerationEntry.setDouble(((AngularVelocity) m_rightMotor.getAcceleration()).in(RPM));
+        */
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+      builder.addDoubleProperty("Dashboard RPM",() -> dashboardTargetRPM, value -> dashboardTargetRPM = value);
     }
 }

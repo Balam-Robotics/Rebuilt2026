@@ -25,3 +25,9 @@ en teoria ya esta todo, bueno me falto el subsistema del hanger pero eso es un p
 # v1.0.1
 - 1.0.1 - codigo de hanger falta implementar
 - me da hueva poner numeros poer el punto es ya implmente el codigo de lhanger y voy a carar los uatonomos de fer y cami en la siguiente commit
+
+-- update el 21 de marzo de 2026
+
+el codigo ya deberia funcionar y todo osea lit njo deberia faltar nada, ahorita vamos a probar y espermos por dios que esto funcione porque si no me voy a matar
+
+FUNCIONOOOO POR FIN EL CODIGO FUNCIONCOOOOO AHUEVO, solo hubieros unso errroes que aqui corregi pero aparte de eso todo lo demase stuvo genial POR FIN AHUEBO

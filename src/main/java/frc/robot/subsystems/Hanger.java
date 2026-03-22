@@ -131,6 +131,10 @@ public class Hanger extends SubsystemBase {
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
   }
 
+  public Command extendHopperCommand() {
+    return runOnce(() -> set(Position.EXTEND_HOPPER));
+  }
+
   public boolean isHomed() {
     return isHomed;
   }

@@ -40,9 +40,9 @@ public class RobotContainer {
     private final Hanger hanger = new Hanger();
 
     private final Limelight limelight_front = new Limelight("limelight-front");
-    private final Limelight limelight_back = new Limelight("limelight-back");
+    private final Limelight limelight_back = new Limelight("limelight");
 
-    private final SwerveTelemetry m_swerveTelemetry = new SwerveTelemetry(SwerveConstants.kMaxSpeed.in(MetersPerSecond));
+    //private final SwerveTelemetry m_swerveTelemetry = new SwerveTelemetry(SwerveConstants.kMaxSpeed.in(MetersPerSecond));
 
     private final CommandXboxController m_controller = new CommandXboxController(0);
 
@@ -72,14 +72,14 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         m_autoRoutines.configure();
-        swerve.registerTelemetry(m_swerveTelemetry::telemeterize);
+        //swerve.registerTelemetry(m_swerveTelemetry::telemeterize);
     }
 
     private void configureBindings() {
         configureManualDriveBindings();
         limelight_front.setDefaultCommand(updateVisionCommand(limelight_front));
         limelight_back.setDefaultCommand(updateVisionCommand(limelight_back));
-    
+
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
             .onTrue(intake.homingCommand())
             .onTrue(hanger.homingCommand());
@@ -87,7 +87,7 @@ public class RobotContainer {
         m_controller.rightTrigger().whileTrue(m_subsystemCommands.aimAndShoot());
         m_controller.rightBumper().whileTrue(m_subsystemCommands.shootManually());
         m_controller.leftTrigger().whileTrue(intake.intakeCommand());
-        m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
+        //m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
     
         m_controller.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         m_controller.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
