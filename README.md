@@ -31,3 +31,5 @@ en teoria ya esta todo, bueno me falto el subsistema del hanger pero eso es un p
 el codigo ya deberia funcionar y todo osea lit njo deberia faltar nada, ahorita vamos a probar y espermos por dios que esto funcione porque si no me voy a matar
 
 FUNCIONOOOO POR FIN EL CODIGO FUNCIONCOOOOO AHUEVO, solo hubieros unso errroes que aqui corregi pero aparte de eso todo lo demase stuvo genial POR FIN AHUEBO
+
+okok ya mejor, encontre dos problemas uqe pueden explicar pq la limelight no funcionba bien y porque el robot dejo de funcionar relativo, ya le arregle y eso y agregue mas mecniasc como edsstuckear las pelotas, cambiar el modo de robot relaive y field relative y otras cositas tons yeiii

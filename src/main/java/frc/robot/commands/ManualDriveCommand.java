@@ -49,7 +49,6 @@ public class ManualDriveCommand extends Command {
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
       .withSteerRequestType(SteerRequestType.MotionMagicExpo)
       .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
-      .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
       .withHeadingPID(5, 0, 0);
 
   private final SwerveRequest.RobotCentric robotCentricRequest = new SwerveRequest.RobotCentric()
@@ -113,7 +112,7 @@ public class ManualDriveCommand extends Command {
     final ManualDriveInput input = inputSmoother.getSmoothedInput();
 
     // check for centric in swerve
-    if (swerve.m_fieldRelative) {
+    if (!swerve.m_fieldRelative) {
       currentState = State.DRIVING_WITH_ROBOT_CENTRIC_CONTROL;
     } else if (input.hasRotation()) {
       currentState = State.DRIVING_WITH_MANUAL_ROTATION;

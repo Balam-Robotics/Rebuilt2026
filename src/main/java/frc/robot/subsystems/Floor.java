@@ -81,6 +81,10 @@ public class Floor extends SubsystemBase {
     return startEnd(() -> set(Speed.UNSTOCK), () -> set(Speed.STOP));
   }
 
+  public void stop() {
+    set(Speed.STOP);
+  }
+
   private GenericEntry currentCommandEntry = ShuffleboardConstants.kFloorTab.add("Floor/Current Command", 0.0)
       .withWidget(BuiltInWidgets.kCommand)
       .withSize(2, 1)

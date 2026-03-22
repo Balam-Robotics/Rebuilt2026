@@ -66,6 +66,15 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
+    public Command flipRobotMode() {
+        return runOnce(() -> {
+            m_fieldRelative = !m_fieldRelative;
+            if (!m_fieldRelative) {
+                setOperatorPerspectiveForward(getState().Pose.getRotation()); // chacne tengo q quitar eso
+            }
+        });
+    }
+
     public void followPath(SwerveSample sample) {
         pathThetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -111,6 +120,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     @Override 
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
-        super.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 }

@@ -93,6 +93,10 @@ public class Feeder extends SubsystemBase {
     return startEnd(() -> set(Speed.UNSTUCK), () -> setPercentOutput(0));
   }
 
+  public void stop() {
+    setPercentOutput(0.0);
+  }
+
   private GenericEntry currentCommandEntry = ShuffleboardConstants.kFeederTab.add("Feeder/Current Command", "null")
       .withWidget(BuiltInWidgets.kCommand)
       .withSize(2, 1)

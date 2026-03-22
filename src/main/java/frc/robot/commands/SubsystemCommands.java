@@ -95,7 +95,10 @@ public final class SubsystemCommands {
         Commands.waitSeconds(0.125)
           .andThen(floor.unstuckCommand()) 
       )
-    );
+    ).handleInterrupt(() -> {
+      feeder.stop();
+      floor.stop();
+    });
   }
 
 }

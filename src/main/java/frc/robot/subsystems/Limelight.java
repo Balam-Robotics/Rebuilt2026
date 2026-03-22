@@ -29,7 +29,7 @@ public class Limelight extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation(name, currentRobotPose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
         final PoseEstimate poseEstimate_MegaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
-        final PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiRed_MegaTag2(name);
+        final PoseEstimate poseEstimate_MegaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
     
         if (
             poseEstimate_MegaTag1 == null
@@ -50,11 +50,11 @@ public class Limelight extends SubsystemBase {
     }
 
     public static class Measurement {
-        public final PoseEstimate poseEstiamte;
+        public final PoseEstimate poseEstimate;
         public final Matrix<N3, N1> standardDeviations;
 
         public Measurement(PoseEstimate poseEstimate, Matrix<N3, N1> standardDeviations) {
-            this.poseEstiamte = poseEstimate;
+            this.poseEstimate = poseEstimate;
             this.standardDeviations = standardDeviations;
         }
     }
