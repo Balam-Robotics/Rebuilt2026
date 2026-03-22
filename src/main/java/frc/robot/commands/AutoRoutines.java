@@ -12,6 +12,7 @@ import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -38,6 +39,8 @@ public class AutoRoutines {
 
     private final AutoFactory autoFactory;
     private final AutoChooser autoChooser;
+
+    private final Field2d m_field = new Field2d();
 
     public AutoRoutines(
             Swerve swerve,
@@ -68,6 +71,7 @@ public class AutoRoutines {
         autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot", this::R_Bi_Rs);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
+        SmartDashboard.putData("Traj Field", m_field);
     }
 
     /*
@@ -114,6 +118,12 @@ public class AutoRoutines {
 
         routine.active().onTrue(
                 Commands.sequence(
+                        Commands.runOnce(() -> {
+
+                            m_field.getObject("traj1").setPoses(startToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(ballzoneToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj3").setPoses(ballzoneToShooting.getRawTrajectory().getPoses());
+                        }),
                         startToBallzone.resetOdometry(),
                         startToBallzone.cmd()));
 
@@ -154,6 +164,12 @@ public class AutoRoutines {
 
         routine.active().onTrue(
                 Commands.sequence(
+                        Commands.runOnce(() -> {
+
+                            m_field.getObject("traj1").setPoses(rightStartlineToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(ballzoneToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj3").setPoses(rightBallzoneToRight.getRawTrajectory().getPoses());
+                        }),
                         rightStartlineToBallzone.resetOdometry(),
                         rightStartlineToBallzone.cmd()));
 
