@@ -192,6 +192,13 @@ public record ChoreoTraj(
 	    new Pose2d(7.747, 0.992, Rotation2d.fromRadians(-1.571)),
 	    new Pose2d(2.65, 2.449, Rotation2d.fromRadians(0.634))
 	);
+	public static final ChoreoTraj RightBallzoneToRight = new ChoreoTraj(
+	    "RightBallzoneToRight",
+	    OptionalInt.empty(),
+	    3.68061,
+	    new Pose2d(7.747, 6.905, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(2.884, 2.538, Rotation2d.fromRadians(0.6))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -221,7 +228,8 @@ public record ChoreoTraj(
 		Map.entry("OutpostToHup", OutpostToHup),
 		Map.entry("CenterStartlineToRightBallzone", CenterStartlineToRightBallzone),
 		Map.entry("CenterStartlineToOutpost", CenterStartlineToOutpost),
-		Map.entry("RightBallzoneToShooting", RightBallzoneToShooting)
+		Map.entry("RightBallzoneToShooting", RightBallzoneToShooting),
+		Map.entry("RightBallzoneToRight", RightBallzoneToRight)
     );
 
     /**
