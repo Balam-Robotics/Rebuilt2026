@@ -87,4 +87,15 @@ public final class SubsystemCommands {
     );
   }
 
+  public Command doorstock() {
+    return Commands.sequence(
+      Commands.waitSeconds(0.25),
+      Commands.parallel(
+        feeder.unstuckCommand(),
+        Commands.waitSeconds(0.125)
+          .andThen(floor.unstuckCommand()) 
+      )
+    );
+  }
+
 }

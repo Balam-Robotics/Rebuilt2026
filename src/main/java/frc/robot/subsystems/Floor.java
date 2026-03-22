@@ -29,7 +29,9 @@ import frc.robot.Constants.ShuffleboardConstants;
 public class Floor extends SubsystemBase {
   public enum Speed {
     STOP(0),
-    FEED(0.83);
+    FEED(0.83),
+    UNSTOCK(-0.5);
+
 
     private final double percentOutput;
 
@@ -73,6 +75,10 @@ public class Floor extends SubsystemBase {
 
   public Command feedCommand() {
     return startEnd(() -> set(Speed.FEED), () -> set(Speed.STOP));
+  }
+
+  public Command unstuckCommand() {
+    return startEnd(() -> set(Speed.UNSTOCK), () -> set(Speed.STOP));
   }
 
   private GenericEntry currentCommandEntry = ShuffleboardConstants.kFloorTab.add("Floor/Current Command", 0.0)

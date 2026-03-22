@@ -42,7 +42,7 @@ public class RobotContainer {
     private final Limelight limelight_front = new Limelight("limelight-front");
     private final Limelight limelight_back = new Limelight("limelight");
 
-    //private final SwerveTelemetry m_swerveTelemetry = new SwerveTelemetry(SwerveConstants.kMaxSpeed.in(MetersPerSecond));
+    private final SwerveTelemetry m_swerveTelemetry = new SwerveTelemetry(SwerveConstants.kMaxSpeed.in(MetersPerSecond));
 
     private final CommandXboxController m_controller = new CommandXboxController(0);
 
@@ -72,7 +72,7 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         m_autoRoutines.configure();
-        //swerve.registerTelemetry(m_swerveTelemetry::telemeterize);
+        swerve.registerTelemetry(m_swerveTelemetry::telemeterize);
     }
 
     private void configureBindings() {
@@ -89,8 +89,9 @@ public class RobotContainer {
         m_controller.leftTrigger().whileTrue(intake.intakeCommand());
         //m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
     
-        m_controller.povUp().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
-        m_controller.povDown().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
+        m_controller.b().onTrue(m_subsystemCommands.doorstock());
+        m_controller.y().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
+        m_controller.a().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
     }
 
     private void configureManualDriveBindings() {
@@ -102,11 +103,11 @@ public class RobotContainer {
         );
         swerve.setDefaultCommand(manualDriveCommand);
 
-        m_controller.a().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        m_controller.b().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
-        m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
-        m_controller.y().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
-        m_controller.back().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+        m_controller.povDown().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
+        m_controller.povLeft().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        m_controller.povRight().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
+        m_controller.povUp().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
+        m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
     }
 
     private Command updateVisionCommand(Limelight limelight) {
