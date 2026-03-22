@@ -87,6 +87,11 @@ public final class SubsystemCommands {
     );
   }
 
+
+  public Command unstuck() {
+    return feeder.unstuckCommand().alongWith(floor.unstuckCommand().handleInterrupt(() -> floor.stop())).handleInterrupt(() -> feeder.stop());
+  }
+
   public Command doorstock() {
     return Commands.sequence(
       Commands.waitSeconds(0.25),

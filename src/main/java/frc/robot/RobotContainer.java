@@ -76,8 +76,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         configureManualDriveBindings();
-        limelight_front.setDefaultCommand(updateVisionCommand());
-        limelight_back.setDefaultCommand(updateVisionCommand());
+        limelight_front.setDefaultCommand(updateVisionCommand(limelight_front));
+        limelight_back.setDefaultCommand(updateVisionCommand(limelight_back));
 
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
                 .onTrue(intake.homingCommand())
@@ -86,10 +86,9 @@ public class RobotContainer {
         m_controller.rightTrigger().whileTrue(m_subsystemCommands.aimAndShoot());
         m_controller.rightBumper().whileTrue(m_subsystemCommands.shootManually());
         m_controller.leftTrigger().whileTrue(intake.intakeCommand());
-        // m_controller.leftBumper().onTrue(intake.runOnce(() ->
-        // intake.set(Intake.Position.STOWED)));
+        m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
-        m_controller.b().onTrue(m_subsystemCommands.doorstock());
+        m_controller.b().whileTrue(m_subsystemCommands.unstuck());
         m_controller.y().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         m_controller.a().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
         m_controller.start().onTrue(swerve.flipRobotMode());
@@ -124,13 +123,28 @@ public class RobotContainer {
                         m.standardDeviations);
             });
 
-            limelight_back.getMeasurement(currentRobotPose).ifPresent(m -> {
+            final Optional<Limelight.Measurement> backMeasurement = limelight_back.getMeasurement(currentRobotPose);
+            backMeasurement.ifPresent(m -> {
                 swerve.addVisionMeasurement(
                         m.poseEstimate.pose,
                         m.poseEstimate.timestampSeconds,
                         m.standardDeviations);
             });
 
+        }, limelight_back, limelight_front).ignoringDisable(true);
+    }
+
+    private Command updateVisionCommand(Limelight limelight) {
+        return limelight.run(()-> {
+                final Pose2d currentRobotPose = swerve.getState().Pose;
+                final Optional<Limelight.Measurement> measuremnet = limelight.getMeasurement(currentRobotPose);
+                measuremnet.ifPresent(m -> {
+                        swerve.addVisionMeasurement(
+                                m.poseEstimate.pose,
+                                m.poseEstimate.timestampSeconds,
+                                m.standardDeviations
+                                );
+                });
         }).ignoringDisable(true);
     }
 }
