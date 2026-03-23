@@ -103,9 +103,9 @@ public class RobotContainer {
         swerve.setDefaultCommand(manualDriveCommand);
 
         m_controller.povDown().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.k180deg)));
-        m_controller.povLeft()
-                .onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
         m_controller.povRight()
+                .onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCW_90deg)));
+        m_controller.povLeft()
                 .onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
         m_controller.povUp().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
         m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));

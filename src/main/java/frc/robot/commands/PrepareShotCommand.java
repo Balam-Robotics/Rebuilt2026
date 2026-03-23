@@ -67,6 +67,8 @@ public class PrepareShotCommand extends Command {
       shooter.setRPM(shot.shooterRPM);
       hood.setPosition(shot.hoodAngle);
       SmartDashboard.putNumber("Distance to Hub (inches)", distanceToHub.in(Inches));
+      SmartDashboard.putBoolean("Velocity within tolerance", shooter.isVelocityWithinTolerance());
+      SmartDashboard.putBoolean("Is hood withing tolerance", hood.isPositionWithinTolerance());
     }
 
   @Override

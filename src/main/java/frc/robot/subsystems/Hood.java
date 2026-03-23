@@ -63,7 +63,7 @@ public class Hood extends SubsystemBase {
   }
 
   public boolean isPositionWithinTolerance() {
-    return MathUtil.isNear(kMaxPosition, currentPosition, kPositionTolerance);
+    return MathUtil.isNear(targetPosition, currentPosition, kPositionTolerance);
   }
 
   private void updateCurrentPosition() {
