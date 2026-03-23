@@ -180,7 +180,7 @@ public class AutoRoutines {
 
         rightStartlineToBallzone.doneDelayed(1).onTrue(ballzoneToBallzone.cmd());
 
-        ballzoneToBallzone.atTimeBeforeEnd(1).onTrue(intake.intakeCommand());
+        ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
         ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
 
         rightBallzoneToRight.active().whileTrue(limelight.idle());

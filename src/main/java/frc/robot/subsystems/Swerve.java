@@ -31,9 +31,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public boolean m_fieldRelative = true;
 
     private final SwerveRequest.ApplyFieldSpeeds pathFieldSpeedsRequest = new SwerveRequest.ApplyFieldSpeeds();
-    private final PIDController pathXController = new PIDController(10, 0, 0);
-    private final PIDController pathYController = new PIDController(10, 0, 0);
-    private final PIDController pathThetaController = new PIDController(7, 0, 0);
+    private final PIDController pathXController = new PIDController(30, 0, 0);
+    private final PIDController pathYController = new PIDController(50, 0, 0);
+    private final PIDController pathThetaController = new PIDController(3, 0, 0);
 
     public Swerve() {
         super(

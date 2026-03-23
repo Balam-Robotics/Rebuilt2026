@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +15,6 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-
 
 public final class SubsystemCommands {
   private final Swerve swerve;
@@ -29,16 +29,15 @@ public final class SubsystemCommands {
   private final DoubleSupplier leftInput;
 
   public SubsystemCommands(
-    Swerve swerve,
-    Intake intake,
-    Floor floor,
-    Feeder feeder,
-    Shooter shooter,
-    Hood hood,
-    Hanger hanger,
-    DoubleSupplier forwardInput,
-    DoubleSupplier leftInput
-  ) {
+      Swerve swerve,
+      Intake intake,
+      Floor floor,
+      Feeder feeder,
+      Shooter shooter,
+      Hood hood,
+      Hanger hanger,
+      DoubleSupplier forwardInput,
+      DoubleSupplier leftInput) {
     this.swerve = swerve;
     this.intake = intake;
     this.floor = floor;
@@ -49,29 +48,26 @@ public final class SubsystemCommands {
     this.forwardInput = forwardInput;
     this.leftInput = leftInput;
   }
-  
+
   public SubsystemCommands(
-    Swerve swerve,
-    Intake intake,
-    Floor floor,
-    Feeder feeder,
-    Shooter shooter,
-    Hood hood,
-    Hanger hanger
-  ) {
+      Swerve swerve,
+      Intake intake,
+      Floor floor,
+      Feeder feeder,
+      Shooter shooter,
+      Hood hood,
+      Hanger hanger) {
     this(swerve, intake, floor, feeder, shooter, hood, hanger, () -> 0.0, () -> 0.0);
   }
-  
+
   public Command aimAndShoot() {
     final AimAndDriveCommand aimAndDriveCommand = new AimAndDriveCommand(swerve, forwardInput, leftInput);
     final PrepareShotCommand prepareShotCommand = new PrepareShotCommand(shooter, hood, () -> swerve.getState().Pose);
     return Commands.parallel(
-      aimAndDriveCommand,
-      Commands.waitSeconds(0.25).andThen(prepareShotCommand),
-      Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot()).andThen(feed())
-    );
+        aimAndDriveCommand,
+        Commands.waitSeconds(0.25).andThen(prepareShotCommand),
+        Commands.waitUntil(() -> aimAndDriveCommand.isAimed() && prepareShotCommand.isReadyToShoot()).andThen(feed()));
   }
-
 
   public Command shootManually() {
     return shooter.dashboardSpinUpCommand().andThen(feed()).handleInterrupt(() -> shooter.stop());
@@ -79,32 +75,36 @@ public final class SubsystemCommands {
 
   private Command feed() {
     return Commands.sequence(
-      Commands.waitSeconds(0.25),
-      Commands.parallel(
-        feeder.feedCommand(),
-        Commands.waitSeconds(0.125)
-          .andThen(floor.feedCommand().alongWith(intake.agitateCommand()))
-      )
-    );
+        Commands.waitSeconds(0.25),
+        Commands.parallel(
+            feeder.feedCommand(),
+            Commands.waitSeconds(0.125)
+                .andThen(floor.feedCommand().alongWith(intake.agitateCommand()))));
   }
-
 
   public Command unstuck() {
-    return feeder.unstuckCommand().alongWith(floor.unstuckCommand().handleInterrupt(() -> floor.stop())).handleInterrupt(() -> feeder.stop());
+    return feeder.unstuckCommand()
+        .alongWith(
+            floor.unstuckCommand()
+                .handleInterrupt(() -> floor.stop()),
+            shooter.unstuckCommand()
+                .handleInterrupt(() -> shooter.stop()))
+        .handleInterrupt(() -> feeder.stop());
   }
+
+
 
   public Command doorstock() {
     return Commands.sequence(
-      Commands.waitSeconds(0.25),
-      Commands.parallel(
-        feeder.unstuckCommand(),
-        Commands.waitSeconds(0.125)
-          .andThen(floor.unstuckCommand()) 
-      )
-    ).handleInterrupt(() -> {
-      feeder.stop();
-      floor.stop();
-    });
+        Commands.waitSeconds(0.25),
+        Commands.parallel(
+            feeder.unstuckCommand(),
+            Commands.waitSeconds(0.125)
+                .andThen(floor.unstuckCommand())))
+        .handleInterrupt(() -> {
+          feeder.stop();
+          floor.stop();
+        });
   }
 
 }
