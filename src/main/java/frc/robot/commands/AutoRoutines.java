@@ -178,12 +178,12 @@ public class AutoRoutines {
                         Commands.waitSeconds(0.5),
                         intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
-        rightStartlineToBallzone.doneDelayed(1).onTrue(ballzoneToBallzone.cmd());
+        rightStartlineToBallzone.doneDelayed(0.125).onTrue(ballzoneToBallzone.cmd());
 
         ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
         ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
 
-        rightBallzoneToRight.active().whileTrue(limelight.idle());
+        //rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making limelight not work?
         rightBallzoneToRight.atTime(0.5).onTrue(
                 Commands.parallel(
                         shooter.spinUpCommand(2600),

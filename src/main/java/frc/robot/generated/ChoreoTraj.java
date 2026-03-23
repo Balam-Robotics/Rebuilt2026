@@ -1,4 +1,4 @@
-// spotless:off
+
 package frc.robot.generated;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -6,10 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.Map;
 import java.util.OptionalInt;
 
+// If these imports cause errors because you're not using ChoreoLib,
+// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
-// If the 2 imports above cause errors because you're not using ChoreoLib,
-// turn off "Include ChoreoLib-specific Helpers" in Choreo's codegen settings.
 
 /**
  * A class containing the name, start pose, end pose, and total time of every Choreo trajectory.
@@ -24,212 +24,212 @@ public record ChoreoTraj(
     Pose2d initialPoseBlue,
     Pose2d endPoseBlue
 ) {
-    public static final ChoreoTraj cami = new ChoreoTraj(
-        "cami",
-        OptionalInt.empty(),
-        14.23012,
-        new Pose2d(3.30243, 4.06488, Rotation2d.fromRadians(0)),
-        new Pose2d(3.30366, 4.09545, Rotation2d.fromRadians(-0.04859))
-    );
-    public static final ChoreoTraj CenterStartlineToDeepot = new ChoreoTraj(
-        "CenterStartlineToDeepot",
-        OptionalInt.empty(),
-        2.40378,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(0.46852, 4.99364, Rotation2d.fromRadians(1.5708))
-    );
-    public static final ChoreoTraj CenterStartlineToHup = new ChoreoTraj(
-        "CenterStartlineToHup",
-        OptionalInt.empty(),
-        0.70732,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(3.04194, 4.01252, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj CenterStartlineToLeftBallzone = new ChoreoTraj(
-        "CenterStartlineToLeftBallzone",
-        OptionalInt.empty(),
-        3.84015,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(7.85229, 7.01946, Rotation2d.fromRadians(-1.58345))
-    );
-    public static final ChoreoTraj CenterStartlineToOutpost = new ChoreoTraj(
-        "CenterStartlineToOutpost",
-        OptionalInt.empty(),
-        3.38318,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(0.46083, 0.69099, Rotation2d.fromRadians(-3.13638))
-    );
-    public static final ChoreoTraj CenterStartlineToRightBallzone = new ChoreoTraj(
-        "CenterStartlineToRightBallzone",
-        OptionalInt.empty(),
-        3.80224,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(7.85229, 1.246, Rotation2d.fromRadians(1.55018))
-    );
-    public static final ChoreoTraj ConstraintTest = new ChoreoTraj(
-        "ConstraintTest",
-        OptionalInt.empty(),
-        3.60665,
-        new Pose2d(0.94691, 0.90148, Rotation2d.fromRadians(0)),
-        new Pose2d(6.33387, 2.571, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj Forward = new ChoreoTraj(
-        "Forward",
-        OptionalInt.empty(),
-        2.70907,
-        new Pose2d(2.42721, 3.63948, Rotation2d.fromRadians(0)),
-        new Pose2d(6.43404, 4.65232, Rotation2d.fromRadians(0))
-    );
-    public static final ChoreoTraj HupToDeepot = new ChoreoTraj(
-        "HupToDeepot",
-        OptionalInt.empty(),
-        1.72155,
-        new Pose2d(2.84931, 5.4503, Rotation2d.fromRadians(-0.74696)),
-        new Pose2d(1.14449, 6.03406, Rotation2d.fromRadians(3.14159))
-    );
-    public static final ChoreoTraj LeftBallzoneToRightBallzone = new ChoreoTraj(
-        "LeftBallzoneToRightBallzone",
-        OptionalInt.empty(),
-        3.70669,
-        new Pose2d(7.74672, 6.92535, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(7.74672, 0.99214, Rotation2d.fromRadians(-1.5708))
-    );
-    public static final ChoreoTraj LeftDeepotToRightDeepot = new ChoreoTraj(
-        "LeftDeepotToRightDeepot",
-        OptionalInt.empty(),
-        1.47566,
-        new Pose2d(0.47918, 6.89431, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(0.47918, 4.9873, Rotation2d.fromRadians(-1.5708))
-    );
-    public static final ChoreoTraj LeftHupToCage = new ChoreoTraj(
-        "LeftHupToCage",
-        OptionalInt.empty(),
-        1.88756,
-        new Pose2d(2.84931, 5.4503, Rotation2d.fromRadians(-0.74696)),
-        new Pose2d(1.63207, 3.74627, Rotation2d.fromRadians(3.14159))
-    );
-    public static final ChoreoTraj LeftStartlineToBallzone = new ChoreoTraj(
-        "LeftStartlineToBallzone",
-        OptionalInt.empty(),
-        4.12157,
-        new Pose2d(3.69044, 7.57912, Rotation2d.fromRadians(0)),
-        new Pose2d(7.74672, 6.92535, Rotation2d.fromRadians(-1.5708))
-    );
-    public static final ChoreoTraj LeftStartlineToDeepot = new ChoreoTraj(
-        "LeftStartlineToDeepot",
-        OptionalInt.empty(),
-        2.4063,
-        new Pose2d(3.69044, 7.57912, Rotation2d.fromRadians(0)),
-        new Pose2d(0.47918, 6.89431, Rotation2d.fromRadians(-1.5708))
-    );
-    public static final ChoreoTraj LeftStartlineToHup = new ChoreoTraj(
-        "LeftStartlineToHup",
-        OptionalInt.empty(),
-        1.72738,
-        new Pose2d(3.69044, 7.57912, Rotation2d.fromRadians(0)),
-        new Pose2d(2.84931, 5.4503, Rotation2d.fromRadians(-0.74696))
-    );
-    public static final ChoreoTraj LoDeAbajoButParaAnimales = new ChoreoTraj(
-        "LoDeAbajoButParaAnimales",
-        OptionalInt.empty(),
-        3.4434,
-        new Pose2d(3.57998, 3.99809, Rotation2d.fromRadians(0)),
-        new Pose2d(0.46674, 0.67557, Rotation2d.fromRadians(3.11721))
-    );
-    public static final ChoreoTraj NewPath = new ChoreoTraj(
-        "NewPath",
-        OptionalInt.empty(),
-        8.44175,
-        new Pose2d(3.57361, 2.45969, Rotation2d.fromRadians(0)),
-        new Pose2d(3.2731, 2.86038, Rotation2d.fromRadians(0.57852))
-    );
-    public static final ChoreoTraj OutpostToHup = new ChoreoTraj(
-        "OutpostToHup",
-        OptionalInt.empty(),
-        2.41933,
-        new Pose2d(0.46083, 0.69099, Rotation2d.fromRadians(-3.13638)),
-        new Pose2d(2.84931, 2.546, Rotation2d.fromRadians(0.67224))
-    );
-    public static final ChoreoTraj RightBallzoneToLeftBallzone = new ChoreoTraj(
-        "RightBallzoneToLeftBallzone",
-        OptionalInt.empty(),
-        1.8303,
-        new Pose2d(7.74672, 1.1017, Rotation2d.fromRadians(1.5708)),
-        new Pose2d(7.77379, 3.64858, Rotation2d.fromRadians(1.5708))
-    );
-    public static final ChoreoTraj RightBallzoneToRight = new ChoreoTraj(
-        "RightBallzoneToRight",
-        OptionalInt.empty(),
-        5.25794,
-        new Pose2d(7.74672, 6.90548, Rotation2d.fromRadians(1.5708)),
-        new Pose2d(2.88354, 2.5376, Rotation2d.fromRadians(0.60005))
-    );
-    public static final ChoreoTraj RightBallzoneToShooting = new ChoreoTraj(
-        "RightBallzoneToShooting",
-        OptionalInt.empty(),
-        4.33102,
-        new Pose2d(7.74672, 0.99214, Rotation2d.fromRadians(-1.5708)),
-        new Pose2d(1.77068, 2.65516, Rotation2d.fromRadians(0.63363))
-    );
-    public static final ChoreoTraj RightDeepotToLeftDeepot = new ChoreoTraj(
-        "RightDeepotToLeftDeepot",
-        OptionalInt.empty(),
-        1.49645,
-        new Pose2d(0.46852, 4.99364, Rotation2d.fromRadians(1.5708)),
-        new Pose2d(0.46852, 6.93845, Rotation2d.fromRadians(1.57292))
-    );
-    public static final ChoreoTraj RightStartlineToBallzone = new ChoreoTraj(
-        "RightStartlineToBallzone",
-        OptionalInt.empty(),
-        5.1999,
-        new Pose2d(3.64399, 0.46963, Rotation2d.fromRadians(0)),
-        new Pose2d(7.74672, 1.1017, Rotation2d.fromRadians(1.56795))
-    );
-    public static final ChoreoTraj RightStartlineToHup = new ChoreoTraj(
-        "RightStartlineToHup",
-        OptionalInt.empty(),
-        1.66839,
-        new Pose2d(3.63808, 0.49688, Rotation2d.fromRadians(0)),
-        new Pose2d(2.84931, 2.546, Rotation2d.fromRadians(0.67224))
-    );
     public static final ChoreoTraj RightStartlineToOutpost = new ChoreoTraj(
-        "RightStartlineToOutpost",
-        OptionalInt.empty(),
-        2.61816,
-        new Pose2d(3.63808, 0.74902, Rotation2d.fromRadians(0)),
-        new Pose2d(0.46674, 0.67557, Rotation2d.fromRadians(-3.14032))
-    );
+	    "RightStartlineToOutpost",
+	    OptionalInt.empty(),
+	    2.61816,
+	    new Pose2d(3.638, 0.749, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.467, 0.676, Rotation2d.fromRadians(-3.14))
+	);
+	public static final ChoreoTraj LeftBallzoneToRightBallzone = new ChoreoTraj(
+	    "LeftBallzoneToRightBallzone",
+	    OptionalInt.empty(),
+	    3.70669,
+	    new Pose2d(7.747, 6.925, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(7.747, 0.992, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj ConstraintTest = new ChoreoTraj(
+	    "ConstraintTest",
+	    OptionalInt.empty(),
+	    3.60665,
+	    new Pose2d(0.947, 0.901, Rotation2d.fromRadians(0)),
+	    new Pose2d(6.334, 2.571, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj CenterStartlineToDeepot = new ChoreoTraj(
+	    "CenterStartlineToDeepot",
+	    OptionalInt.empty(),
+	    2.40378,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.469, 4.994, Rotation2d.fromRadians(1.571))
+	);
+	public static final ChoreoTraj Forward = new ChoreoTraj(
+	    "Forward",
+	    OptionalInt.empty(),
+	    2.70907,
+	    new Pose2d(2.427, 3.639, Rotation2d.fromRadians(0)),
+	    new Pose2d(6.434, 4.652, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj CenterStartlineToHup = new ChoreoTraj(
+	    "CenterStartlineToHup",
+	    OptionalInt.empty(),
+	    0.70732,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.042, 4.013, Rotation2d.fromRadians(0))
+	);
+	public static final ChoreoTraj LoDeAbajoButParaAnimales = new ChoreoTraj(
+	    "LoDeAbajoButParaAnimales",
+	    OptionalInt.empty(),
+	    3.4434,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.467, 0.676, Rotation2d.fromRadians(3.117))
+	);
+	public static final ChoreoTraj LeftStartlineToBallzone = new ChoreoTraj(
+	    "LeftStartlineToBallzone",
+	    OptionalInt.empty(),
+	    4.12157,
+	    new Pose2d(3.69, 7.579, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.747, 6.925, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj RightStartlineToBallzone = new ChoreoTraj(
+	    "RightStartlineToBallzone",
+	    OptionalInt.empty(),
+	    5.1999,
+	    new Pose2d(3.644, 0.47, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.747, 1.102, Rotation2d.fromRadians(1.568))
+	);
+	public static final ChoreoTraj RightBallzoneToRight = new ChoreoTraj(
+	    "RightBallzoneToRight",
+	    OptionalInt.empty(),
+	    3.59867,
+	    new Pose2d(7.774, 3.649, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(2.884, 2.538, Rotation2d.fromRadians(0.6))
+	);
+	public static final ChoreoTraj RightDeepotToLeftDeepot = new ChoreoTraj(
+	    "RightDeepotToLeftDeepot",
+	    OptionalInt.empty(),
+	    1.49645,
+	    new Pose2d(0.469, 4.994, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(0.469, 6.938, Rotation2d.fromRadians(1.573))
+	);
+	public static final ChoreoTraj cami = new ChoreoTraj(
+	    "cami",
+	    OptionalInt.empty(),
+	    14.23012,
+	    new Pose2d(3.302, 4.065, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.304, 4.095, Rotation2d.fromRadians(-0.049))
+	);
+	public static final ChoreoTraj NewPath = new ChoreoTraj(
+	    "NewPath",
+	    OptionalInt.empty(),
+	    8.44175,
+	    new Pose2d(3.574, 2.46, Rotation2d.fromRadians(0)),
+	    new Pose2d(3.273, 2.86, Rotation2d.fromRadians(0.579))
+	);
+	public static final ChoreoTraj HupToDeepot = new ChoreoTraj(
+	    "HupToDeepot",
+	    OptionalInt.empty(),
+	    1.72155,
+	    new Pose2d(2.849, 5.45, Rotation2d.fromRadians(-0.747)),
+	    new Pose2d(1.144, 6.034, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj LeftStartlineToHup = new ChoreoTraj(
+	    "LeftStartlineToHup",
+	    OptionalInt.empty(),
+	    1.72738,
+	    new Pose2d(3.69, 7.579, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.849, 5.45, Rotation2d.fromRadians(-0.747))
+	);
+	public static final ChoreoTraj RightBallzoneToLeftBallzone = new ChoreoTraj(
+	    "RightBallzoneToLeftBallzone",
+	    OptionalInt.empty(),
+	    1.8303,
+	    new Pose2d(7.747, 1.102, Rotation2d.fromRadians(1.571)),
+	    new Pose2d(7.774, 3.649, Rotation2d.fromRadians(1.571))
+	);
+	public static final ChoreoTraj CenterStartlineToLeftBallzone = new ChoreoTraj(
+	    "CenterStartlineToLeftBallzone",
+	    OptionalInt.empty(),
+	    3.84015,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.852, 7.019, Rotation2d.fromRadians(-1.583))
+	);
+	public static final ChoreoTraj LeftHupToCage = new ChoreoTraj(
+	    "LeftHupToCage",
+	    OptionalInt.empty(),
+	    1.88756,
+	    new Pose2d(2.849, 5.45, Rotation2d.fromRadians(-0.747)),
+	    new Pose2d(1.632, 3.746, Rotation2d.fromRadians(3.142))
+	);
+	public static final ChoreoTraj RightStartlineToHup = new ChoreoTraj(
+	    "RightStartlineToHup",
+	    OptionalInt.empty(),
+	    1.66839,
+	    new Pose2d(3.638, 0.497, Rotation2d.fromRadians(0)),
+	    new Pose2d(2.849, 2.546, Rotation2d.fromRadians(0.672))
+	);
+	public static final ChoreoTraj LeftDeepotToRightDeepot = new ChoreoTraj(
+	    "LeftDeepotToRightDeepot",
+	    OptionalInt.empty(),
+	    1.47566,
+	    new Pose2d(0.479, 6.894, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(0.479, 4.987, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj LeftStartlineToDeepot = new ChoreoTraj(
+	    "LeftStartlineToDeepot",
+	    OptionalInt.empty(),
+	    2.4063,
+	    new Pose2d(3.69, 7.579, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.479, 6.894, Rotation2d.fromRadians(-1.571))
+	);
+	public static final ChoreoTraj OutpostToHup = new ChoreoTraj(
+	    "OutpostToHup",
+	    OptionalInt.empty(),
+	    2.41933,
+	    new Pose2d(0.461, 0.691, Rotation2d.fromRadians(-3.136)),
+	    new Pose2d(2.849, 2.546, Rotation2d.fromRadians(0.672))
+	);
+	public static final ChoreoTraj CenterStartlineToRightBallzone = new ChoreoTraj(
+	    "CenterStartlineToRightBallzone",
+	    OptionalInt.empty(),
+	    3.80224,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(7.852, 1.246, Rotation2d.fromRadians(1.55))
+	);
+	public static final ChoreoTraj CenterStartlineToOutpost = new ChoreoTraj(
+	    "CenterStartlineToOutpost",
+	    OptionalInt.empty(),
+	    3.38318,
+	    new Pose2d(3.58, 3.998, Rotation2d.fromRadians(0)),
+	    new Pose2d(0.461, 0.691, Rotation2d.fromRadians(-3.136))
+	);
+	public static final ChoreoTraj RightBallzoneToShooting = new ChoreoTraj(
+	    "RightBallzoneToShooting",
+	    OptionalInt.empty(),
+	    4.33102,
+	    new Pose2d(7.747, 0.992, Rotation2d.fromRadians(-1.571)),
+	    new Pose2d(1.771, 2.655, Rotation2d.fromRadians(0.634))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
      * This allows for trajectory data to be looked up with strings during runtime.
      */
     public static final Map<String, ChoreoTraj> ALL_TRAJECTORIES = Map.ofEntries(
-        Map.entry("cami", cami),
-        Map.entry("CenterStartlineToDeepot", CenterStartlineToDeepot),
-        Map.entry("CenterStartlineToHup", CenterStartlineToHup),
-        Map.entry("CenterStartlineToLeftBallzone", CenterStartlineToLeftBallzone),
-        Map.entry("CenterStartlineToOutpost", CenterStartlineToOutpost),
-        Map.entry("CenterStartlineToRightBallzone", CenterStartlineToRightBallzone),
-        Map.entry("ConstraintTest", ConstraintTest),
-        Map.entry("Forward", Forward),
-        Map.entry("HupToDeepot", HupToDeepot),
-        Map.entry("LeftBallzoneToRightBallzone", LeftBallzoneToRightBallzone),
-        Map.entry("LeftDeepotToRightDeepot", LeftDeepotToRightDeepot),
-        Map.entry("LeftHupToCage", LeftHupToCage),
-        Map.entry("LeftStartlineToBallzone", LeftStartlineToBallzone),
-        Map.entry("LeftStartlineToDeepot", LeftStartlineToDeepot),
-        Map.entry("LeftStartlineToHup", LeftStartlineToHup),
-        Map.entry("LoDeAbajoButParaAnimales", LoDeAbajoButParaAnimales),
-        Map.entry("NewPath", NewPath),
-        Map.entry("OutpostToHup", OutpostToHup),
-        Map.entry("RightBallzoneToLeftBallzone", RightBallzoneToLeftBallzone),
-        Map.entry("RightBallzoneToRight", RightBallzoneToRight),
-        Map.entry("RightBallzoneToShooting", RightBallzoneToShooting),
-        Map.entry("RightDeepotToLeftDeepot", RightDeepotToLeftDeepot),
-        Map.entry("RightStartlineToBallzone", RightStartlineToBallzone),
-        Map.entry("RightStartlineToHup", RightStartlineToHup),
-        Map.entry("RightStartlineToOutpost", RightStartlineToOutpost)
+    	Map.entry("RightStartlineToOutpost", RightStartlineToOutpost),
+		Map.entry("LeftBallzoneToRightBallzone", LeftBallzoneToRightBallzone),
+		Map.entry("ConstraintTest", ConstraintTest),
+		Map.entry("CenterStartlineToDeepot", CenterStartlineToDeepot),
+		Map.entry("Forward", Forward),
+		Map.entry("CenterStartlineToHup", CenterStartlineToHup),
+		Map.entry("LoDeAbajoButParaAnimales", LoDeAbajoButParaAnimales),
+		Map.entry("LeftStartlineToBallzone", LeftStartlineToBallzone),
+		Map.entry("RightStartlineToBallzone", RightStartlineToBallzone),
+		Map.entry("RightBallzoneToRight", RightBallzoneToRight),
+		Map.entry("RightDeepotToLeftDeepot", RightDeepotToLeftDeepot),
+		Map.entry("cami", cami),
+		Map.entry("NewPath", NewPath),
+		Map.entry("HupToDeepot", HupToDeepot),
+		Map.entry("LeftStartlineToHup", LeftStartlineToHup),
+		Map.entry("RightBallzoneToLeftBallzone", RightBallzoneToLeftBallzone),
+		Map.entry("CenterStartlineToLeftBallzone", CenterStartlineToLeftBallzone),
+		Map.entry("LeftHupToCage", LeftHupToCage),
+		Map.entry("RightStartlineToHup", RightStartlineToHup),
+		Map.entry("LeftDeepotToRightDeepot", LeftDeepotToRightDeepot),
+		Map.entry("LeftStartlineToDeepot", LeftStartlineToDeepot),
+		Map.entry("OutpostToHup", OutpostToHup),
+		Map.entry("CenterStartlineToRightBallzone", CenterStartlineToRightBallzone),
+		Map.entry("CenterStartlineToOutpost", CenterStartlineToOutpost),
+		Map.entry("RightBallzoneToShooting", RightBallzoneToShooting)
     );
 
     /**
@@ -256,4 +256,3 @@ public record ChoreoTraj(
         return routine.trajectory(this.name);
     }
 }
-// spotless:on

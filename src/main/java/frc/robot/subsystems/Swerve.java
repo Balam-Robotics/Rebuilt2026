@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.generated.TunerConstants;
@@ -31,9 +30,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public boolean m_fieldRelative = true;
 
     private final SwerveRequest.ApplyFieldSpeeds pathFieldSpeedsRequest = new SwerveRequest.ApplyFieldSpeeds();
-    private final PIDController pathXController = new PIDController(30, 0, 0);
-    private final PIDController pathYController = new PIDController(50, 0, 0);
-    private final PIDController pathThetaController = new PIDController(3, 0, 0);
+    private final PIDController pathXController = new PIDController(10, 0, 0);
+    private final PIDController pathYController = new PIDController(10, 0, 0);
+    private final PIDController pathThetaController = new PIDController(7.5, 0, 0);
 
     public Swerve() {
         super(
