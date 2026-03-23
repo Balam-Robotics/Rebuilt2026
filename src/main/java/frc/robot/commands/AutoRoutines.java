@@ -8,6 +8,10 @@ import static frc.robot.generated.ChoreoTraj.RightStartlineToBallzone;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToRight;
 
+import static frc.robot.generated.ChoreoTraj.RightShootToMiddleBallzone;
+import static frc.robot.generated.ChoreoTraj.MiddleRightBallzoneToMiddleLeftBallzone;
+import static frc.robot.generated.ChoreoTraj.MiddleBallzoneToRightShoot;
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
@@ -183,12 +187,82 @@ public class AutoRoutines {
         ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
         ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
 
-        //rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making limelight not work?
+        // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
+        // limelight not work?
         rightBallzoneToRight.atTime(0.5).onTrue(
                 Commands.parallel(
                         shooter.spinUpCommand(2600),
                         hood.positionCommand(0.32)));
         rightBallzoneToRight.done().onTrue(
+                Commands.sequence(
+                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
+
+        return routine;
+    }
+
+    private AutoRoutine R_Bi_Rs_Bi_Rs() {
+
+        boolean AUTO_VERIFIED = false;
+        if (!AUTO_VERIFIED) {
+            System.out.println("WARNING: Auto routine not verified!");
+        }
+
+        final AutoRoutine routine = autoFactory
+                .newRoutine("Right start -> Ballpit intkake -> Right shoot -> Middle ballpit -> Right Shoot");
+        final AutoTrajectory rightStartlineToBallzone = RightStartlineToBallzone.asAutoTraj(routine);
+        final AutoTrajectory ballzoneToBallzone = RightBallzoneToLeftBallzone.asAutoTraj(routine);
+        final AutoTrajectory rightBallzoneToRight = RightBallzoneToRight.asAutoTraj(routine);
+
+        final AutoTrajectory rightShootToMiddleBallzone = RightShootToMiddleBallzone.asAutoTraj(routine);
+        final AutoTrajectory middleRightBallzoneToMiddleLeftBallzone = MiddleRightBallzoneToMiddleLeftBallzone
+                .asAutoTraj(routine);
+        final AutoTrajectory middleBallzoneToRightShoot = MiddleBallzoneToRightShoot.asAutoTraj(routine);
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        Commands.runOnce(() -> {
+
+                            m_field.getObject("traj1").setPoses(rightStartlineToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(ballzoneToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj3").setPoses(rightBallzoneToRight.getRawTrajectory().getPoses());
+                        }),
+                        rightStartlineToBallzone.resetOdometry(),
+                        rightStartlineToBallzone.cmd()));
+
+        routine.observe(hanger::isHomed).onTrue(
+                Commands.sequence(
+                        Commands.waitSeconds(0.5),
+                        intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
+
+        // First cycle
+
+        rightStartlineToBallzone.doneDelayed(0.125).onTrue(ballzoneToBallzone.cmd());
+
+        ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
+        ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
+
+        // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
+        // limelight not work?
+        rightBallzoneToRight.atTime(0.5).onTrue(
+                Commands.parallel(
+                        shooter.spinUpCommand(2600),
+                        hood.positionCommand(0.32)));
+        rightBallzoneToRight.done().onTrue(
+                Commands.sequence(
+                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
+
+        // Second cycle
+
+        rightShootToMiddleBallzone.doneDelayed(0.125).onTrue(middleRightBallzoneToMiddleLeftBallzone.cmd());
+
+        middleRightBallzoneToMiddleLeftBallzone.atTimeBeforeEnd(2).onTrue(intake.intakeCommand());
+        middleRightBallzoneToMiddleLeftBallzone.doneDelayed(0.1).onTrue(middleBallzoneToRightShoot.cmd());
+
+        middleBallzoneToRightShoot.atTime(0.5).onTrue(
+                Commands.parallel(
+                        shooter.spinUpCommand(2600),
+                        hood.positionCommand(0.32)));
+        middleBallzoneToRightShoot.done().onTrue(
                 Commands.sequence(
                         m_subsystemCommands.aimAndShoot().withTimeout(5)));
 

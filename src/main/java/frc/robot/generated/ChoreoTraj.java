@@ -90,9 +90,9 @@ public record ChoreoTraj(
 	public static final ChoreoTraj RightBallzoneToRight = new ChoreoTraj(
 	    "RightBallzoneToRight",
 	    OptionalInt.empty(),
-	    3.59867,
+	    7.10795,
 	    new Pose2d(7.774, 3.649, Rotation2d.fromRadians(1.571)),
-	    new Pose2d(2.884, 2.538, Rotation2d.fromRadians(0.6))
+	    new Pose2d(8.215, 3.806, Rotation2d.fromRadians(1.56))
 	);
 	public static final ChoreoTraj RightDeepotToLeftDeepot = new ChoreoTraj(
 	    "RightDeepotToLeftDeepot",
@@ -199,6 +199,27 @@ public record ChoreoTraj(
 	    new Pose2d(7.747, 0.992, Rotation2d.fromRadians(-1.571)),
 	    new Pose2d(1.771, 2.655, Rotation2d.fromRadians(0.634))
 	);
+	public static final ChoreoTraj RightShootToMiddleBallzone = new ChoreoTraj(
+	    "RightShootToMiddleBallzone",
+	    OptionalInt.empty(),
+	    4.95574,
+	    new Pose2d(1.771, 2.655, Rotation2d.fromRadians(0.634)),
+	    new Pose2d(8.226, 0.879, Rotation2d.fromRadians(1.551))
+	);
+	public static final ChoreoTraj MiddleRightBallzoneToMiddleLeftBallzone = new ChoreoTraj(
+	    "MiddleRightBallzoneToMiddleLeftBallzone",
+	    OptionalInt.empty(),
+	    2.04094,
+	    new Pose2d(8.226, 0.879, Rotation2d.fromRadians(1.551)),
+	    new Pose2d(8.215, 3.806, Rotation2d.fromRadians(1.56))
+	);
+	public static final ChoreoTraj MiddleBallzoneToRightShoot = new ChoreoTraj(
+	    "MiddleBallzoneToRightShoot",
+	    OptionalInt.empty(),
+	    3.92738,
+	    new Pose2d(8.215, 3.806, Rotation2d.fromRadians(1.56)),
+	    new Pose2d(2.806, 2.593, Rotation2d.fromRadians(0.84))
+	);
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -229,7 +250,10 @@ public record ChoreoTraj(
 		Map.entry("OutpostToHup", OutpostToHup),
 		Map.entry("CenterStartlineToRightBallzone", CenterStartlineToRightBallzone),
 		Map.entry("CenterStartlineToOutpost", CenterStartlineToOutpost),
-		Map.entry("RightBallzoneToShooting", RightBallzoneToShooting)
+		Map.entry("RightBallzoneToShooting", RightBallzoneToShooting),
+		Map.entry("RightShootToMiddleBallzone", RightShootToMiddleBallzone),
+		Map.entry("MiddleRightBallzoneToMiddleLeftBallzone", MiddleRightBallzoneToMiddleLeftBallzone),
+		Map.entry("MiddleBallzoneToRightShoot", MiddleBallzoneToRightShoot)
     );
 
     /**
