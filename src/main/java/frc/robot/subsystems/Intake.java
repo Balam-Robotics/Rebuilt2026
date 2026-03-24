@@ -169,6 +169,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command agitateCommand() {
+    return Commands.print("thank you");
+    /*
     return runOnce(() -> set(Speed.INTAKE))
         .andThen(
             Commands.sequence(
@@ -180,7 +182,7 @@ public class Intake extends SubsystemBase {
         .handleInterrupt(() -> {
           set(Position.INTAKE);
           set(Speed.STOP);
-        });
+        }); */
   }
 
   public Command homingCommand() {

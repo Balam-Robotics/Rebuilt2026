@@ -1,9 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.generated.ChoreoTraj.LeftStartlineToBallzone;
-import static frc.robot.generated.ChoreoTraj.LeftBallzoneToRightBallzone;
-import static frc.robot.generated.ChoreoTraj.RightBallzoneToShooting;
-
 import static frc.robot.generated.ChoreoTraj.RightStartlineToBallzone;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToRight;
@@ -71,8 +67,8 @@ public class AutoRoutines {
     }
 
     public void configure() {
-        autoChooser.addRoutine("Left -> Ballpittt -> Right Shoot", this::L_Bi_Rs);
         autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot", this::R_Bi_Rs);
+        autoChooser.addRoutine("advance", this::R_Bi_Rs_Bi_Rs);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
         SmartDashboard.putData("Traj Field", m_field);
@@ -107,53 +103,6 @@ public class AutoRoutines {
      */
 
     // Full autonomous
-
-    private AutoRoutine L_Bi_Rs() {
-
-        boolean AUTO_VERIFIED = false;
-        if (!AUTO_VERIFIED) {
-            System.out.println("WARNING: Auto routine not verified!");
-        }
-
-        final AutoRoutine routine = autoFactory.newRoutine("Forward Auto");
-        final AutoTrajectory startToBallzone = LeftStartlineToBallzone.asAutoTraj(routine);
-        final AutoTrajectory ballzoneToBallzone = LeftBallzoneToRightBallzone.asAutoTraj(routine);
-        final AutoTrajectory ballzoneToShooting = RightBallzoneToShooting.asAutoTraj(routine);
-
-        routine.active().onTrue(
-                Commands.sequence(
-                        Commands.runOnce(() -> {
-
-                            m_field.getObject("traj1").setPoses(startToBallzone.getRawTrajectory().getPoses());
-                            m_field.getObject("traj2").setPoses(ballzoneToBallzone.getRawTrajectory().getPoses());
-                            m_field.getObject("traj3").setPoses(ballzoneToShooting.getRawTrajectory().getPoses());
-                        }),
-                        startToBallzone.resetOdometry(),
-                        startToBallzone.cmd()));
-
-        routine.observe(hanger::isHomed).onTrue(
-                Commands.sequence(
-                        Commands.waitSeconds(0.5),
-                        intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
-
-        startToBallzone.doneDelayed(1).onTrue(ballzoneToBallzone.cmd());
-
-        ballzoneToBallzone.atTimeBeforeEnd(1).onTrue(intake.intakeCommand());
-        ballzoneToBallzone.doneDelayed(0.1).onTrue(ballzoneToShooting.cmd());
-
-        ballzoneToShooting.active().whileTrue(limelight.idle());
-        ballzoneToShooting.atTime(0.5).onTrue(
-                Commands.parallel(
-                        shooter.spinUpCommand(2600),
-                        hood.positionCommand(0.32)));
-        ballzoneToShooting.done().onTrue(
-                Commands.sequence(
-                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
-
-        return routine;
-
-    }
-
     private AutoRoutine R_Bi_Rs() {
 
         boolean AUTO_VERIFIED = false;
@@ -184,7 +133,7 @@ public class AutoRoutines {
 
         rightStartlineToBallzone.doneDelayed(0.125).onTrue(ballzoneToBallzone.cmd());
 
-        ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
+        ballzoneToBallzone.atTime(0).onTrue(intake.intakeCommand());
         ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
 
         // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
@@ -238,7 +187,7 @@ public class AutoRoutines {
 
         rightStartlineToBallzone.doneDelayed(0.125).onTrue(ballzoneToBallzone.cmd());
 
-        ballzoneToBallzone.atTimeBeforeEnd(1.8).onTrue(intake.intakeCommand());
+        ballzoneToBallzone.atTime(0).onTrue(intake.intakeCommand());
         ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
 
         // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
@@ -253,9 +202,11 @@ public class AutoRoutines {
 
         // Second cycle
 
+        rightBallzoneToRight.doneDelayed(5).onTrue(rightShootToMiddleBallzone.cmd());
+
         rightShootToMiddleBallzone.doneDelayed(0.125).onTrue(middleRightBallzoneToMiddleLeftBallzone.cmd());
 
-        middleRightBallzoneToMiddleLeftBallzone.atTimeBeforeEnd(2).onTrue(intake.intakeCommand());
+        middleRightBallzoneToMiddleLeftBallzone.atTime(0).onTrue(intake.intakeCommand());
         middleRightBallzoneToMiddleLeftBallzone.doneDelayed(0.1).onTrue(middleBallzoneToRightShoot.cmd());
 
         middleBallzoneToRightShoot.atTime(0.5).onTrue(
