@@ -1,12 +1,17 @@
 package frc.robot.commands;
 
 import static frc.robot.generated.ChoreoTraj.RightStartlineToBallzone;
+import static frc.robot.generated.ChoreoTraj.cami;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.RightBallzoneToRight;
 
 import static frc.robot.generated.ChoreoTraj.RightShootToMiddleBallzone;
 import static frc.robot.generated.ChoreoTraj.MiddleRightBallzoneToMiddleLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.MiddleBallzoneToRightShoot;
+
+import static frc.robot.generated.ChoreoTraj.LeftStartlineToBallzone;
+import static frc.robot.generated.ChoreoTraj.LeftBallzoneToRightBallzone;
+import static frc.robot.generated.ChoreoTraj.LeftBallzoneToLeft;
 
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
@@ -68,7 +73,9 @@ public class AutoRoutines {
 
     public void configure() {
         autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot", this::R_Bi_Rs);
-        autoChooser.addRoutine("advance", this::R_Bi_Rs_Bi_Rs);
+        autoChooser.addRoutine("Left start -> Ballpit intake -> Left shoot", this::L_Bi_Ls);
+        autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot x2", this::R_Bi_Rs_Bi_Rs);
+        autoChooser.addRoutine("cami", this::cami);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
         SmartDashboard.putData("Traj Field", m_field);
@@ -149,6 +156,50 @@ public class AutoRoutines {
         return routine;
     }
 
+    private AutoRoutine L_Bi_Ls() {
+
+        boolean AUTO_VERIFIED = false;
+        if (!AUTO_VERIFIED) {
+            System.out.println("WARNING: Auto routine not verified!");
+        }
+
+        final AutoRoutine routine = autoFactory.newRoutine("Left start -> Ballpit intake -> Left shoot");
+        final AutoTrajectory leftStartlineToBallzone = LeftStartlineToBallzone.asAutoTraj(routine);
+        final AutoTrajectory leftBallzoneToRightBallzone = LeftBallzoneToRightBallzone.asAutoTraj(routine);
+        final AutoTrajectory leftBallzoneToRight = LeftBallzoneToLeft.asAutoTraj(routine);
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        Commands.runOnce(() -> {
+
+                            m_field.getObject("traj1").setPoses(leftStartlineToBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(leftBallzoneToRightBallzone.getRawTrajectory().getPoses());
+                            m_field.getObject("traj3").setPoses(leftBallzoneToRight.getRawTrajectory().getPoses());
+                        }),
+                        leftStartlineToBallzone.resetOdometry(),
+                        leftStartlineToBallzone.cmd()));
+
+        routine.observe(hanger::isHomed).onTrue(
+                Commands.sequence(
+                        Commands.waitSeconds(0.5),
+                        intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
+
+        leftStartlineToBallzone.doneDelayed(0.125).onTrue(leftBallzoneToRightBallzone.cmd());
+
+        leftBallzoneToRightBallzone.atTime(0).onTrue(intake.intakeCommand());
+        leftBallzoneToRightBallzone.doneDelayed(0.1).onTrue(leftBallzoneToRight.cmd());
+
+        leftBallzoneToRight.atTime(0.5).onTrue(
+                Commands.parallel(
+                        shooter.spinUpCommand(2600),
+                        hood.positionCommand(0.32)));
+        leftBallzoneToRight.done().onTrue(
+                Commands.sequence(
+                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
+
+        return routine;
+    }
+
     private AutoRoutine R_Bi_Rs_Bi_Rs() {
 
         boolean AUTO_VERIFIED = false;
@@ -216,6 +267,51 @@ public class AutoRoutines {
         middleBallzoneToRightShoot.done().onTrue(
                 Commands.sequence(
                         m_subsystemCommands.aimAndShoot().withTimeout(5)));
+
+        return routine;
+    }
+
+
+
+    private AutoRoutine cami() {
+
+        boolean AUTO_VERIFIED = false;
+        if (!AUTO_VERIFIED) {
+            System.out.println("WARNING: Auto routine not verified!");
+        }
+
+        final AutoRoutine routine = autoFactory
+                .newRoutine("Right start -> Ballpit intkake -> Right shoot -> Middle ballpit -> Right Shoot");
+        final AutoTrajectory camiTraj = cami.asAutoTraj(routine);
+
+        routine.active().onTrue(
+                Commands.sequence(
+                        Commands.runOnce(() -> {
+
+                            m_field.getObject("traj1").setPoses(camiTraj.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(camiTraj.getRawTrajectory().getPoses());
+                            m_field.getObject("traj3").setPoses(camiTraj.getRawTrajectory().getPoses());
+                        }),
+                        camiTraj.resetOdometry(),
+                        camiTraj.cmd()));
+
+        routine.observe(hanger::isHomed).onTrue(
+                Commands.sequence(
+                        Commands.waitSeconds(0.5),
+                        intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
+
+        camiTraj.atTime(3.5).onTrue(intake.intakeCommand());
+
+        // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
+        // limelight not work?
+        camiTraj.atTime(7.5).onTrue(
+                Commands.parallel(
+                        shooter.spinUpCommand(2600),
+                        hood.positionCommand(0.32)));
+        camiTraj.done().onTrue(
+                Commands.sequence(
+                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
+
 
         return routine;
     }
