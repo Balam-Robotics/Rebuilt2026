@@ -17,6 +17,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.generated.TunerConstants;
@@ -34,6 +36,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private final PIDController pathYController = new PIDController(10, 0, 0);
     private final PIDController pathThetaController = new PIDController(7.5, 0, 0);
 
+    private Field2d m_field = new Field2d();
+
     public Swerve() {
         super(
                 TunerConstants.DrivetrainConstants,
@@ -44,6 +48,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 TunerConstants.FrontRight,
                 TunerConstants.BackLeft,
                 TunerConstants.BackRight);
+        SmartDashboard.putData("Traj Field", m_field);
     }
 
     public AutoFactory createAutoFactory() {
@@ -58,8 +63,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 this::followPath,
                 true,
                 this,
-                trajectoryLogger
-            );
+                trajectoryLogger);
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -82,20 +86,24 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
         var targetSpeeds = sample.getChassisSpeeds();
         targetSpeeds.vxMetersPerSecond += pathXController.calculate(
-            pose.getX(), sample.x
-        );
+                pose.getX(), sample.x);
         targetSpeeds.vyMetersPerSecond += pathYController.calculate(
-            pose.getY(), sample.y
-        );
+                pose.getY(), sample.y);
         targetSpeeds.omegaRadiansPerSecond += pathThetaController.calculate(
-            pose.getRotation().getRadians(), sample.heading
-        );
+                pose.getRotation().getRadians(), sample.heading);
+
+        // display where the robot SHOULD Be with each sample in the m_field
+        Pose2d targetPose = new Pose2d(
+                sample.x,
+                sample.y,
+                new Rotation2d(sample.heading));
+
+        m_field.getObject("target").setPose(targetPose);
 
         setControl(
-            pathFieldSpeedsRequest.withSpeeds(targetSpeeds)
-                .withWheelForceFeedforwardsX(sample.moduleForcesX())
-                .withWheelForceFeedforwardsY(sample.moduleForcesY())
-        );
+                pathFieldSpeedsRequest.withSpeeds(targetSpeeds)
+                        .withWheelForceFeedforwardsX(sample.moduleForcesX())
+                        .withWheelForceFeedforwardsY(sample.moduleForcesY()));
     }
 
     @Override
@@ -103,8 +111,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         if (!m_haveFlipped || DriverStation.isDisabled()) {
             DriverStation.getAlliance().ifPresent(allianceColor -> {
                 setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red ? kREDALLIANCEPERS_ROTATION2D : kBLUEALLIANCEPERS_ROTATION2D
-                );
+                        allianceColor == Alliance.Red ? kREDALLIANCEPERS_ROTATION2D : kBLUEALLIANCEPERS_ROTATION2D);
                 if (!m_haveFlipped) {
                     seedFieldCentric();
                 }
@@ -118,8 +125,14 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-    @Override 
-    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
-        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    @Override
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds),
+                visionMeasurementStdDevs);
+    }
+
+    public Field2d getField() {
+        return m_field;
     }
 }

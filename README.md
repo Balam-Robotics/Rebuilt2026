@@ -33,3 +33,5 @@ el codigo ya deberia funcionar y todo osea lit njo deberia faltar nada, ahorita 
 FUNCIONOOOO POR FIN EL CODIGO FUNCIONCOOOOO AHUEVO, solo hubieros unso errroes que aqui corregi pero aparte de eso todo lo demase stuvo genial POR FIN AHUEBO
 
 okok ya mejor, encontre dos problemas uqe pueden explicar pq la limelight no funcionba bien y porque el robot dejo de funcionar relativo, ya le arregle y eso y agregue mas mecniasc como edsstuckear las pelotas, cambiar el modo de robot relaive y field relative y otras cositas tons yeiii
+
+ya perdi cuenta de que tanta mmd le hice pero en resumen ya esta casi el codigo listo para la competencia, pero en resumen ya estan la mayoria autonoms, automaticiaon, blah blah, solo me falta agregar que cuando el intake este listo el robt vay amas lento pero aja luego cecho xd

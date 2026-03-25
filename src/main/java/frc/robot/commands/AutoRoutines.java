@@ -13,6 +13,10 @@ import static frc.robot.generated.ChoreoTraj.LeftStartlineToBallzone;
 import static frc.robot.generated.ChoreoTraj.LeftBallzoneToRightBallzone;
 import static frc.robot.generated.ChoreoTraj.LeftBallzoneToLeft;
 
+import static frc.robot.generated.ChoreoTraj.CenterStartlineToLeft;
+import static frc.robot.generated.ChoreoTraj.Seminuevo;
+
+
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
@@ -45,7 +49,7 @@ public class AutoRoutines {
     private final AutoFactory autoFactory;
     private final AutoChooser autoChooser;
 
-    private final Field2d m_field = new Field2d();
+    private final Field2d m_field;
 
     public AutoRoutines(
             Swerve swerve,
@@ -69,16 +73,17 @@ public class AutoRoutines {
 
         this.autoFactory = swerve.createAutoFactory();
         this.autoChooser = new AutoChooser();
+
+        this.m_field = swerve.getField();
     }
 
     public void configure() {
         autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot", this::R_Bi_Rs);
         autoChooser.addRoutine("Left start -> Ballpit intake -> Left shoot", this::L_Bi_Ls);
-        autoChooser.addRoutine("Right start -> Ballpit intkake -> Right shoot x2", this::R_Bi_Rs_Bi_Rs);
+        autoChooser.addRoutine("Center-left start -> Ballpit intake -> Left shoot", this::C_Bi_Ls);
         autoChooser.addRoutine("cami", this::cami);
         SmartDashboard.putData("Auto Chooser", autoChooser);
         RobotModeTriggers.autonomous().whileTrue(autoChooser.selectedCommandScheduler());
-        SmartDashboard.putData("Traj Field", m_field);
     }
 
     /*
@@ -200,71 +205,42 @@ public class AutoRoutines {
         return routine;
     }
 
-    private AutoRoutine R_Bi_Rs_Bi_Rs() {
+    private AutoRoutine C_Bi_Ls() {
 
         boolean AUTO_VERIFIED = false;
         if (!AUTO_VERIFIED) {
             System.out.println("WARNING: Auto routine not verified!");
         }
 
-        final AutoRoutine routine = autoFactory
-                .newRoutine("Right start -> Ballpit intkake -> Right shoot -> Middle ballpit -> Right Shoot");
-        final AutoTrajectory rightStartlineToBallzone = RightStartlineToBallzone.asAutoTraj(routine);
-        final AutoTrajectory ballzoneToBallzone = RightBallzoneToLeftBallzone.asAutoTraj(routine);
-        final AutoTrajectory rightBallzoneToRight = RightBallzoneToRight.asAutoTraj(routine);
-
-        final AutoTrajectory rightShootToMiddleBallzone = RightShootToMiddleBallzone.asAutoTraj(routine);
-        final AutoTrajectory middleRightBallzoneToMiddleLeftBallzone = MiddleRightBallzoneToMiddleLeftBallzone
-                .asAutoTraj(routine);
-        final AutoTrajectory middleBallzoneToRightShoot = MiddleBallzoneToRightShoot.asAutoTraj(routine);
+        final AutoRoutine routine = autoFactory.newRoutine("Center-left start -> Ballpit intake -> Left shoot");
+        final AutoTrajectory centerStartlineToLeft = CenterStartlineToLeft.asAutoTraj(routine);
+        final AutoTrajectory centerBallpitToLeftShot = Seminuevo.asAutoTraj(routine);
 
         routine.active().onTrue(
                 Commands.sequence(
                         Commands.runOnce(() -> {
 
-                            m_field.getObject("traj1").setPoses(rightStartlineToBallzone.getRawTrajectory().getPoses());
-                            m_field.getObject("traj2").setPoses(ballzoneToBallzone.getRawTrajectory().getPoses());
-                            m_field.getObject("traj3").setPoses(rightBallzoneToRight.getRawTrajectory().getPoses());
+                            m_field.getObject("traj1").setPoses(centerStartlineToLeft.getRawTrajectory().getPoses());
+                            m_field.getObject("traj2").setPoses(centerBallpitToLeftShot.getRawTrajectory().getPoses());
                         }),
-                        rightStartlineToBallzone.resetOdometry(),
-                        rightStartlineToBallzone.cmd()));
+                        centerStartlineToLeft.resetOdometry(),
+                        centerStartlineToLeft.cmd()));
 
         routine.observe(hanger::isHomed).onTrue(
                 Commands.sequence(
                         Commands.waitSeconds(0.5),
                         intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
-        // First cycle
 
-        rightStartlineToBallzone.doneDelayed(0.125).onTrue(ballzoneToBallzone.cmd());
+        centerStartlineToLeft.atTime("intake").onTrue(intake.intakeCommand());
 
-        ballzoneToBallzone.atTime(0).onTrue(intake.intakeCommand());
-        ballzoneToBallzone.doneDelayed(0.1).onTrue(rightBallzoneToRight.cmd());
+        centerStartlineToLeft.doneDelayed(0.1).onTrue(centerBallpitToLeftShot.cmd());
 
-        // rightBallzoneToRight.active().whileTrue(limelight.idle()); -> shit is making
-        // limelight not work?
-        rightBallzoneToRight.atTime(0.5).onTrue(
+        centerBallpitToLeftShot.atTime(1.0).onTrue(
                 Commands.parallel(
                         shooter.spinUpCommand(2600),
                         hood.positionCommand(0.32)));
-        rightBallzoneToRight.done().onTrue(
-                Commands.sequence(
-                        m_subsystemCommands.aimAndShoot().withTimeout(5)));
-
-        // Second cycle
-
-        rightBallzoneToRight.doneDelayed(5).onTrue(rightShootToMiddleBallzone.cmd());
-
-        rightShootToMiddleBallzone.doneDelayed(0.125).onTrue(middleRightBallzoneToMiddleLeftBallzone.cmd());
-
-        middleRightBallzoneToMiddleLeftBallzone.atTime(0).onTrue(intake.intakeCommand());
-        middleRightBallzoneToMiddleLeftBallzone.doneDelayed(0.1).onTrue(middleBallzoneToRightShoot.cmd());
-
-        middleBallzoneToRightShoot.atTime(0.5).onTrue(
-                Commands.parallel(
-                        shooter.spinUpCommand(2600),
-                        hood.positionCommand(0.32)));
-        middleBallzoneToRightShoot.done().onTrue(
+        centerBallpitToLeftShot.done().onTrue(
                 Commands.sequence(
                         m_subsystemCommands.aimAndShoot().withTimeout(5)));
 
