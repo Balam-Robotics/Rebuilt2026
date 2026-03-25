@@ -45,34 +45,6 @@ public record ChoreoTraj(
 	    new Pose2d(7.774, 3.649, Rotation2d.fromRadians(1.571)),
 	    new Pose2d(2.884, 2.538, Rotation2d.fromRadians(0.6))
 	);
-	public static final ChoreoTraj cami = new ChoreoTraj(
-	    "cami",
-	    OptionalInt.empty(),
-	    8.30547,
-	    new Pose2d(3.607, 4.007, Rotation2d.fromRadians(0)),
-	    new Pose2d(2.884, 5.632, Rotation2d.fromRadians(0))
-	);
-	public static final ChoreoTraj cami$0 = new ChoreoTraj(
-	    "cami",
-	    OptionalInt.of(0),
-	    4.79903,
-	    new Pose2d(3.607, 4.007, Rotation2d.fromRadians(0)),
-	    new Pose2d(7.68, 1.172, Rotation2d.fromRadians(1.562))
-	);
-	public static final ChoreoTraj cami$1 = new ChoreoTraj(
-	    "cami",
-	    OptionalInt.of(1),
-	    1.35792,
-	    new Pose2d(7.68, 1.172, Rotation2d.fromRadians(1.562)),
-	    new Pose2d(7.592, 5.136, Rotation2d.fromRadians(1.562))
-	);
-	public static final ChoreoTraj cami$2 = new ChoreoTraj(
-	    "cami",
-	    OptionalInt.of(2),
-	    2.1485199999999995,
-	    new Pose2d(7.592, 5.136, Rotation2d.fromRadians(1.562)),
-	    new Pose2d(2.884, 5.632, Rotation2d.fromRadians(0))
-	);
 	public static final ChoreoTraj RightBallzoneToLeftBallzone = new ChoreoTraj(
 	    "RightBallzoneToLeftBallzone",
 	    OptionalInt.empty(),
@@ -145,10 +117,6 @@ public record ChoreoTraj(
     	Map.entry("MiddleRightBallzoneToMiddleLeftBallzone", MiddleRightBallzoneToMiddleLeftBallzone),
 		Map.entry("RightStartlineToBallzone", RightStartlineToBallzone),
 		Map.entry("RightBallzoneToRight", RightBallzoneToRight),
-		Map.entry("cami", cami),
-		Map.entry("cami$0", cami$0),
-		Map.entry("cami$1", cami$1),
-		Map.entry("cami$2", cami$2),
 		Map.entry("RightBallzoneToLeftBallzone", RightBallzoneToLeftBallzone),
 		Map.entry("RightShootToMiddleBallzone", RightShootToMiddleBallzone),
 		Map.entry("MiddleBallzoneToRightShoot", MiddleBallzoneToRightShoot),
