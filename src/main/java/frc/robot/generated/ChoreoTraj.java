@@ -65,9 +65,9 @@ public record ChoreoTraj(
     public static final ChoreoTraj LeftBallzoneToRightBallzone = new ChoreoTraj(
         "LeftBallzoneToRightBallzone",
         OptionalInt.empty(),
-        1.94861,
-        new Pose2d(7.62496, 7.17885, Rotation2d.fromRadians(-1.57364)),
-        new Pose2d(7.63609, 3.16089, Rotation2d.fromRadians(-1.5708))
+        4.46367,
+        new Pose2d(7.96547, 7.32519, Rotation2d.fromRadians(-1.57364)),
+        new Pose2d(7.95128, 3.09605, Rotation2d.fromRadians(-1.5708))
     );
     public static final ChoreoTraj LeftStartlineToBallzone = new ChoreoTraj(
         "LeftStartlineToBallzone",

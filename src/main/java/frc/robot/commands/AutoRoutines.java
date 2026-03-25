@@ -184,7 +184,7 @@ public class AutoRoutines {
                         Commands.waitSeconds(0.5),
                         intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
-        leftStartlineToBallzone.doneDelayed(0.125).onTrue(leftBallzoneToRightBallzone.cmd());
+        leftStartlineToBallzone.doneDelayed(0).onTrue(leftBallzoneToRightBallzone.cmd());
 
         leftBallzoneToRightBallzone.atTime(0).onTrue(intake.intakeCommand());
         leftBallzoneToRightBallzone.doneDelayed(0.1).onTrue(leftBallzoneToRight.cmd());
