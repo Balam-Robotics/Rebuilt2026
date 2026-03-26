@@ -119,7 +119,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command unstuckCommand() {
-      return startEnd(() -> setPercentOutput(-1), () -> setPercentOutput(0));
+      return startEnd(() -> setPercentOutput(1), () -> setPercentOutput(0));
     }
 
     public boolean isVelocityWithinTolerance() {
