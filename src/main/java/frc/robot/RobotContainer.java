@@ -92,6 +92,7 @@ public class RobotContainer {
         m_controller.y().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         m_controller.a().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
         m_controller.start().onTrue(swerve.flipRobotMode());
+        m_controller.back().onTrue(hanger.positionCommand(Hanger.Position.HOMED));
     }
 
     private void configureManualDriveBindings() {

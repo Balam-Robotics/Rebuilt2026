@@ -34,9 +34,9 @@ public class PrepareShotCommand extends Command {
               .interpolate(startValue.hoodAngle, endValue.hoodAngle, t)));
 
   static {
-    distanceToShotMap.put(Inches.of(52.0), new Shot(2800, 0.19));
-    distanceToShotMap.put(Inches.of(114.4), new Shot(3275, 0.40));
-    distanceToShotMap.put(Inches.of(165.5), new Shot(3650, 0.48));
+    distanceToShotMap.put(Inches.of(52.0), new Shot(3000, 0.19)); // 2800 RPM
+    distanceToShotMap.put(Inches.of(114.4), new Shot(3400, 0.40)); // 3275 RPM
+    distanceToShotMap.put(Inches.of(165.5), new Shot(3650, 0.48)); // 3650 RPM
   }
 
   private final Shooter shooter;
