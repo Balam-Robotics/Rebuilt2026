@@ -25,6 +25,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Hanger;
+import frc.util.Gametime;
 import frc.util.SwerveTelemetry;
 
 import frc.robot.Constants.SwerveConstants;
@@ -38,6 +39,8 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
     private final Hanger hanger = new Hanger();
+
+    private final Gametime gametime = new Gametime();
 
     private final Limelight limelight_front = new Limelight("limelight-front");
     private final Limelight limelight_back = new Limelight("limelight");
