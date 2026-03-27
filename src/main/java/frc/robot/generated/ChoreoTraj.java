@@ -113,9 +113,9 @@ public record ChoreoTraj(
     public static final ChoreoTraj B_LeftBallzoneToMiddleBallzone = new ChoreoTraj(
         "B_LeftBallzoneToMiddleBallzone",
         OptionalInt.empty(),
-        2.23447,
-        new Pose2d(7.74989, 6.99048, Rotation2d.fromRadians(-1.57364)),
-        new Pose2d(7.76376, 4.98961, Rotation2d.fromRadians(-1.5708))
+        2.40661,
+        new Pose2d(7.88253, 6.98134, Rotation2d.fromRadians(-1.57364)),
+        new Pose2d(7.77492, 4.81127, Rotation2d.fromRadians(-1.5708))
     );
     public static final ChoreoTraj B_RightBallzoneToLeftBallzone = new ChoreoTraj(
         "B_RightBallzoneToLeftBallzone",
@@ -134,16 +134,16 @@ public record ChoreoTraj(
     public static final ChoreoTraj C_LeftBallzoneToRightShoot = new ChoreoTraj(
         "C_LeftBallzoneToRightShoot",
         OptionalInt.empty(),
-        2.44054,
+        2.32247,
         new Pose2d(7.17975, 5.42029, Rotation2d.fromRadians(0)),
-        new Pose2d(2.53851, 4.88605, Rotation2d.fromRadians(0))
+        new Pose2d(3.25544, 5.00855, Rotation2d.fromRadians(0))
     );
     public static final ChoreoTraj C_RightBallzoneToLeftShoot = new ChoreoTraj(
         "C_RightBallzoneToLeftShoot",
         OptionalInt.empty(),
-        2.34427,
+        2.18567,
         new Pose2d(6.95715, 2.5376, Rotation2d.fromRadians(0)),
-        new Pose2d(2.48286, 3.10524, Rotation2d.fromRadians(0))
+        new Pose2d(3.16577, 2.92815, Rotation2d.fromRadians(0))
     );
     public static final ChoreoTraj AutoToOutpost = new ChoreoTraj(
         "AutoToOutpost",

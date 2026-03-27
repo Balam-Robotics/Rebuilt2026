@@ -105,8 +105,8 @@ public class AutoRoutines {
                 // this::CL_Bl_Rs);
 
                 // === CENTER-RIGHT ROUTINES ===
-                // autoChooser.addRoutine("CENTER-RIGHT: Ballpit Mid → RIGHT Shoot",
-                // this::CR_Bm_Rs);
+                autoChooser.addRoutine("CENTER-RIGHT: Ballpit Mid → RIGHT Shoot",
+                this::CR_Bm_Rs);
                 // autoChooser.addRoutine("CENTER-RIGHT: Ballpit Long → RIGHT Shoot",
                 // this::CR_Bl_Rs);
                 // autoChooser.addRoutine("CENTER-RIGHT: Ballpit Mid → LEFT Shoot",
@@ -385,7 +385,7 @@ public class AutoRoutines {
                 final AutoRoutine routine = autoFactory.newRoutine("CENTER-RIGHT: Ballpit Mid → RIGHT Shoot");
                 final AutoTrajectory autoA = A_CenterStartlineToRightBallzone.asAutoTraj(routine);
                 final AutoTrajectory autoB = B_RightBallzoneToMiddleBallzone.asAutoTraj(routine);
-                final AutoTrajectory autoC = C_LeftBallzoneToRightShoot.asAutoTraj(routine);
+                final AutoTrajectory autoC = C_RightBallzoneToLeftShoot.asAutoTraj(routine);
 
                 setupAutoRoutine(routine, autoA, autoB, autoC, 2400, 0.32);
                 return routine;
