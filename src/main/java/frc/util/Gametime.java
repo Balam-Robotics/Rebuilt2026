@@ -183,8 +183,15 @@ public class Gametime {
             listener.onChangeNotification(timeUntilChange);
         }
     }
+
+    private double getTimeUntilNextChange(double matchTime) {
+        double timeIntoCycle = getTimeIntoCycle(matchTime);
+        double timeUntilChange = Math.abs(CYCLE_LENGTH / 2 - timeIntoCycle);
+        return timeUntilChange;
+    }
     
     private void updateNetworkTables(double matchTime) {
+        table.getEntry("TimeUntilChange").setDouble(getTimeUntilNextChange(matchTime));
         table.getEntry("MatchTime").setDouble(matchTime);
         table.getEntry("GamePhase").setString(currentPhase.toString());
         table.getEntry("FieldState").setString(currentFieldState.toString());

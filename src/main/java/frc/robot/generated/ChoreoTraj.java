@@ -106,7 +106,7 @@ public record ChoreoTraj(
     public static final ChoreoTraj B_LeftBallzoneToLeftBallzone = new ChoreoTraj(
         "B_LeftBallzoneToLeftBallzone",
         OptionalInt.empty(),
-        2.42012,
+        5.08821,
         new Pose2d(7.74989, 6.99048, Rotation2d.fromRadians(-1.57364)),
         new Pose2d(7.78078, 2.13692, Rotation2d.fromRadians(-1.5708))
     );
@@ -152,6 +152,20 @@ public record ChoreoTraj(
         new Pose2d(3.56032, 3.95042, Rotation2d.fromRadians(0)),
         new Pose2d(2.48426, 3.91455, Rotation2d.fromRadians(0))
     );
+    public static final ChoreoTraj B_Match18 = new ChoreoTraj(
+        "B_Match18",
+        OptionalInt.empty(),
+        3.53005,
+        new Pose2d(8.98802, 1.06316, Rotation2d.fromRadians(1.7088)),
+        new Pose2d(6.05741, 5.69688, Rotation2d.fromRadians(0))
+    );
+    public static final ChoreoTraj A_Match18 = new ChoreoTraj(
+        "A_Match18",
+        OptionalInt.empty(),
+        4.34032,
+        new Pose2d(3.54634, 3.91422, Rotation2d.fromRadians(0)),
+        new Pose2d(8.98802, 1.06316, Rotation2d.fromRadians(1.7088))
+    );
 
     /**
      * A map between trajectory names and their corresponding data.
@@ -175,7 +189,9 @@ public record ChoreoTraj(
         Map.entry("B_RightBallzoneToMiddleBallzone", B_RightBallzoneToMiddleBallzone),
         Map.entry("C_LeftBallzoneToRightShoot", C_LeftBallzoneToRightShoot),
         Map.entry("C_RightBallzoneToLeftShoot", C_RightBallzoneToLeftShoot),
-        Map.entry("AutoToOutpost", AutoToOutpost)
+        Map.entry("AutoToOutpost", AutoToOutpost),
+        Map.entry("B_Match18", B_Match18),
+        Map.entry("A_Match18", A_Match18)
     );
 
     /**

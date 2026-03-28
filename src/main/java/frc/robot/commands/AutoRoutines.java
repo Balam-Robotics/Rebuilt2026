@@ -6,6 +6,7 @@ import static frc.robot.generated.ChoreoTraj.A_CenterStartlineToLeftRivalBallzon
 import static frc.robot.generated.ChoreoTraj.A_CenterStartlineToRightBallzone;
 import static frc.robot.generated.ChoreoTraj.A_CenterStartlineToRivalRightBallzone;
 import static frc.robot.generated.ChoreoTraj.A_LeftStartlineToAlliedBallzone;
+import static frc.robot.generated.ChoreoTraj.A_Match18;
 import static frc.robot.generated.ChoreoTraj.A_RightStartlineToAlliedRightBallzone;
 
 // Phase B - Ball collection trajectories
@@ -13,10 +14,12 @@ import static frc.robot.generated.ChoreoTraj.B_RightBallzoneToLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.B_RightBallzoneToMiddleBallzone;
 import static frc.robot.generated.ChoreoTraj.B_LeftBallzoneToLeftBallzone;
 import static frc.robot.generated.ChoreoTraj.B_LeftBallzoneToMiddleBallzone;
-
+import static frc.robot.generated.ChoreoTraj.B_Match18;
 // Phase C - Shooting trajectories
 import static frc.robot.generated.ChoreoTraj.C_LeftBallzoneToRightShoot; // C_LeftBallzoneToRightShoot
 import static frc.robot.generated.ChoreoTraj.C_RightBallzoneToLeftShoot; // C_RightBallzoneToLeftShoot
+
+import org.opencv.objdetect.ArucoDetector;
 
 import static frc.robot.generated.ChoreoTraj.AutoToOutpost;
 
@@ -93,12 +96,14 @@ public class AutoRoutines {
                 autoChooser.addRoutine("LEFT: Ballpit Mid → LEFT Shoot", this::L_Bm_Ls);
                 autoChooser.addRoutine("LEFT: Ballpit Long → LEFT Shoot", this::L_Bl_Ls);
 
-                autoChooser.addRoutine("CENTER: Shoot", this::C_O);   
-                autoChooser.addRoutine("LEFT: Ballpit Long -> Left Shoot", this::_CL_Bl_Ls);          
+                autoChooser.addRoutine("CENTER: Shoot", this::C_O);
+                autoChooser.addRoutine("LEFT: Ballpit Long -> Left Shoot", this::_CL_Bl_Ls);
 
                 // === CENTER-LEFT ROUTINES ===
                 autoChooser.addRoutine("CENTER-LEFT: Ballpit Mid → LEFT Shoot",
-                this::CL_Bm_Ls);
+                                this::CL_Bm_Ls);
+
+                                autoChooser.addRoutine("MATCH 18", this::match18);
                 // autoChooser.addRoutine("CENTER-LEFT: Ballpit Long → LEFT Shoot",
                 // this::CL_Bl_Ls);
                 // autoChooser.addRoutine("CENTER-LEFT: Ballpit Long → RIGHT Shoot",
@@ -106,7 +111,7 @@ public class AutoRoutines {
 
                 // === CENTER-RIGHT ROUTINES ===
                 autoChooser.addRoutine("CENTER-RIGHT: Ballpit Mid → RIGHT Shoot",
-                this::CR_Bm_Rs);
+                                this::CR_Bm_Rs);
                 // autoChooser.addRoutine("CENTER-RIGHT: Ballpit Long → RIGHT Shoot",
                 // this::CR_Bl_Rs);
                 // autoChooser.addRoutine("CENTER-RIGHT: Ballpit Mid → LEFT Shoot",
@@ -179,6 +184,36 @@ public class AutoRoutines {
                                                 m_subsystemCommands.aimAndShoot().withTimeout(5)));
         }
 
+        private void setupAutoRoutine(AutoRoutine routine, AutoTrajectory autoA, AutoTrajectory autoB,
+                        double shooterRPM, double hoodPosition) {
+
+                // Wait the duration of the auto delay variabe
+                double wait = AUTO_DELAY.getDouble(0.0);
+
+                routine.active().onTrue(
+                                Commands.sequence(
+                                                Commands.runOnce(() -> {
+                                                        m_field.getObject("traj1")
+                                                                        .setPoses(autoA.getRawTrajectory().getPoses());
+                                                        m_field.getObject("traj2")
+                                                                        .setPoses(autoB.getRawTrajectory().getPoses());
+                                                        m_field.getObject("traj3")
+                                                                        .setPoses(autoB.getRawTrajectory().getPoses());
+                                                }),
+                                                Commands.runOnce(() -> new WaitCommand(wait)),
+                                                autoA.resetOdometry(),
+                                                autoA.cmd()));
+
+                routine.observe(hanger::isHomed).onTrue(
+                                Commands.sequence(
+                                                Commands.waitSeconds(1),
+                                                intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
+
+                autoA.doneDelayed(0.125).onTrue(autoB.cmd());
+
+                autoB.atTime(0).onTrue(intake.intakeCommand());
+        }
+
         // ========== SIMPLE ROUTINES ==============
 
         private AutoRoutine C_O() {
@@ -204,8 +239,6 @@ public class AutoRoutines {
                                                 Commands.waitSeconds(1),
                                                 intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
-
-                auto.doneDelayed(0.1).onTrue(auto.cmd());
                 auto.done().onTrue(
                                 Commands.sequence(
                                                 m_subsystemCommands.aimAndShoot().withTimeout(5)));
@@ -295,6 +328,17 @@ public class AutoRoutines {
         }
 
         // ========== CENTER-LEFT ROUTINES ==========
+
+        // MATCH 18
+
+        private AutoRoutine match18() {
+                final AutoRoutine routine = autoFactory.newRoutine("match 18");
+                final AutoTrajectory autoA = A_Match18.asAutoTraj(routine);
+                final AutoTrajectory autoB = B_Match18.asAutoTraj(routine);
+
+                setupAutoRoutine(routine, autoA, autoB, 0, 0);
+                return routine;
+        }
 
         // left to long and return lef
 

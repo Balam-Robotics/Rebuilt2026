@@ -93,7 +93,6 @@ public class RobotContainer {
         m_controller.y().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
         m_controller.a().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
         m_controller.start().onTrue(swerve.flipRobotMode());
-        m_controller.back().onTrue(hanger.positionCommand(Hanger.Position.HOMED));
     }
 
     private void configureManualDriveBindings() {
@@ -111,6 +110,7 @@ public class RobotContainer {
                 .onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
         m_controller.povUp().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
         m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
+        m_controller.back().onTrue(hanger.positionCommand(Hanger.Position.HOMED)); // set the robot wheels on X
     }
 
     private Command updateVisionCommand() {
