@@ -127,7 +127,7 @@ public record ChoreoTraj(
     public static final ChoreoTraj B_RightBallzoneToMiddleBallzone = new ChoreoTraj(
         "B_RightBallzoneToMiddleBallzone",
         OptionalInt.empty(),
-        1.4157,
+        4.39121,
         new Pose2d(7.74989, 1.04209, Rotation2d.fromRadians(1.5708)),
         new Pose2d(7.76376, 3.17704, Rotation2d.fromRadians(1.55981))
     );

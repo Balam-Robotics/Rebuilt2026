@@ -29,7 +29,7 @@ import frc.robot.Constants.ShuffleboardConstants;
 public class Floor extends SubsystemBase {
   public enum Speed {
     STOP(0),
-    FEED(0.83),
+    FEED(1),
     UNSTOCK(-0.5);
 
 

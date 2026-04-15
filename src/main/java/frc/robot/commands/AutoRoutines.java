@@ -170,7 +170,7 @@ public class AutoRoutines {
                                                 Commands.waitSeconds(1),
                                                 intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
-                autoA.doneDelayed(0.125).onTrue(autoB.cmd());
+                autoA.doneDelayed(0).onTrue(autoB.cmd());
 
                 autoB.atTime(0).onTrue(intake.intakeCommand());
                 autoB.doneDelayed(0.1).onTrue(autoC.cmd());
