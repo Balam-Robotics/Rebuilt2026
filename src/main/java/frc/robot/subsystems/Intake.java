@@ -77,6 +77,7 @@ public class Intake extends SubsystemBase {
   private static final Angle kPositionTolerance = Degrees.of(5);
 
   private final TalonFX m_pivotMotor, m_rollerMotor;
+  private final TalonFX m_rollerMotor2;
   private final VoltageOut pivotVoltageRequest = new VoltageOut(0);
   private final MotionMagicVoltage pivotMotionMagicRequest = new MotionMagicVoltage(0).withSlot(0);
   private final VoltageOut rollerVoltageRequest = new VoltageOut(0);
@@ -86,6 +87,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     m_pivotMotor = new TalonFX(Ports.kIntakePivot, Ports.kRoboRioCANBus);
     m_rollerMotor = new TalonFX(Ports.kIntakeRollers, Ports.kRoboRioCANBus);
+    m_rollerMotor2 = new TalonFX(Ports.kIntakeRollers2, Ports.kRoboRioCANBus);
     configurePivotMotor();
     configureRollerMotor();
     SmartDashboard.putData(this);
@@ -134,6 +136,20 @@ public class Intake extends SubsystemBase {
                 .withSupplyCurrentLimit(Amps.of(70))
                 .withSupplyCurrentLimitEnable(true));
     m_rollerMotor.getConfigurator().apply(config);
+
+    // inverted to match the other roller motor
+    final TalonFXConfiguration config2 = new TalonFXConfiguration()
+        .withMotorOutput(
+            new MotorOutputConfigs()
+                .withInverted(InvertedValue.CounterClockwise_Positive)
+                .withNeutralMode(NeutralModeValue.Brake))
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimit(Amps.of(120))
+                .withStatorCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(Amps.of(70))
+                .withSupplyCurrentLimitEnable(true));
+    m_rollerMotor2.getConfigurator().apply(config2);
   }
 
   private boolean isPositionWithinTolerance() {
@@ -156,6 +172,8 @@ public class Intake extends SubsystemBase {
   // rollers
   public void set(Speed speed) {
     m_rollerMotor.setControl(
+        rollerVoltageRequest.withOutput(speed.voltage()));
+    m_rollerMotor2.setControl(
         rollerVoltageRequest.withOutput(speed.voltage()));
   }
 

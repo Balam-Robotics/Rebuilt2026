@@ -24,7 +24,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Hanger;
 import frc.util.Gametime;
 import frc.util.SwerveTelemetry;
 
@@ -38,7 +37,6 @@ public class RobotContainer {
     private final Feeder feeder = new Feeder();
     private final Shooter shooter = new Shooter();
     private final Hood hood = new Hood();
-    private final Hanger hanger = new Hanger();
 
     private final Limelight limelight_front = new Limelight("limelight-front");
     private final Limelight limelight_back = new Limelight("limelight");
@@ -55,7 +53,6 @@ public class RobotContainer {
             feeder,
             shooter,
             hood,
-            hanger,
             limelight_front);
 
     private final SubsystemCommands m_subsystemCommands = new SubsystemCommands(
@@ -65,7 +62,6 @@ public class RobotContainer {
             feeder,
             shooter,
             hood,
-            hanger,
             () -> -m_controller.getLeftY(),
             () -> -m_controller.getLeftX());
 
@@ -81,8 +77,7 @@ public class RobotContainer {
         limelight_back.setDefaultCommand(updateVisionCommand(limelight_back));
 
         RobotModeTriggers.autonomous().or(RobotModeTriggers.teleop())
-                .onTrue(intake.homingCommand())
-                .onTrue(hanger.homingCommand());
+                .onTrue(intake.homingCommand());
 
         m_controller.rightTrigger().whileTrue(m_subsystemCommands.aimAndShoot());
         m_controller.rightBumper().whileTrue(m_subsystemCommands.shootManually());
@@ -90,8 +85,6 @@ public class RobotContainer {
         m_controller.leftBumper().onTrue(intake.runOnce(() -> intake.set(Intake.Position.STOWED)));
 
         m_controller.b().whileTrue(m_subsystemCommands.unstuck());
-        m_controller.y().onTrue(hanger.positionCommand(Hanger.Position.HANGING));
-        m_controller.a().onTrue(hanger.positionCommand(Hanger.Position.HUNG));
         m_controller.start().onTrue(swerve.flipRobotMode());
     }
 
@@ -110,7 +103,6 @@ public class RobotContainer {
                 .onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kCCW_90deg)));
         m_controller.povUp().onTrue(Commands.runOnce(() -> manualDriveCommand.setLockedHeading(Rotation2d.kZero)));
         m_controller.x().onTrue(Commands.runOnce(() -> manualDriveCommand.seedFieldCentric()));
-        m_controller.back().onTrue(hanger.positionCommand(Hanger.Position.HOMED)); // set the robot wheels on X
     }
 
     private Command updateVisionCommand() {

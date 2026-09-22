@@ -36,7 +36,6 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.ShuffleboardConstants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Floor;
-import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -50,7 +49,6 @@ public class AutoRoutines {
         private final Feeder feeder;
         private final Shooter shooter;
         private final Hood hood;
-        private final Hanger hanger;
         private final Limelight limelight;
 
         private final SubsystemCommands m_subsystemCommands;
@@ -68,7 +66,6 @@ public class AutoRoutines {
                         Feeder feeder,
                         Shooter shooter,
                         Hood hood,
-                        Hanger hanger,
                         Limelight limelight) {
                 this.swerve = swerve;
                 this.intake = intake;
@@ -76,10 +73,9 @@ public class AutoRoutines {
                 this.feeder = feeder;
                 this.shooter = shooter;
                 this.hood = hood;
-                this.hanger = hanger;
                 this.limelight = limelight;
 
-                this.m_subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood, hanger);
+                this.m_subsystemCommands = new SubsystemCommands(swerve, intake, floor, feeder, shooter, hood);
 
                 this.autoFactory = swerve.createAutoFactory();
                 this.autoChooser = new AutoChooser();
@@ -165,10 +161,6 @@ public class AutoRoutines {
                                                 autoA.resetOdometry(),
                                                 autoA.cmd()));
 
-                routine.observe(hanger::isHomed).onTrue(
-                                Commands.sequence(
-                                                Commands.waitSeconds(1),
-                                                intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
                 autoA.doneDelayed(0).onTrue(autoB.cmd());
 
@@ -204,10 +196,6 @@ public class AutoRoutines {
                                                 autoA.resetOdometry(),
                                                 autoA.cmd()));
 
-                routine.observe(hanger::isHomed).onTrue(
-                                Commands.sequence(
-                                                Commands.waitSeconds(1),
-                                                intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
                 autoA.doneDelayed(0.125).onTrue(autoB.cmd());
 
@@ -234,10 +222,6 @@ public class AutoRoutines {
                                                 auto.resetOdometry(),
                                                 auto.cmd()));
 
-                routine.observe(hanger::isHomed).onTrue(
-                                Commands.sequence(
-                                                Commands.waitSeconds(1),
-                                                intake.runOnce(() -> intake.set(Intake.Position.INTAKE))));
 
                 auto.done().onTrue(
                                 Commands.sequence(

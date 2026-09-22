@@ -61,6 +61,7 @@ public final class Constants {
         // Talon FX IDs
         public static final int kIntakePivot = 41;
         public static final int kIntakeRollers = 42;
+        public static final int kIntakeRollers2 = 18;
             
         public static final int kFloor = 51;
         public static final int kFeeder = 52;
@@ -68,8 +69,6 @@ public final class Constants {
         public static final int kShooterLeft = 60;
         public static final int kShooterMiddle = 61;
         public static final int kShooterRight = 62;
-
-        public static final int kHanger = 18;
 
         // PWM 
         public static final int kHoodLeftServo = 8;
